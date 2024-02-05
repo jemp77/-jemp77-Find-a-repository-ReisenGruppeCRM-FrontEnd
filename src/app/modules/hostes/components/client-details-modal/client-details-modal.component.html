@@ -1,0 +1,211 @@
+<ng-template #clientDetailsModal let-modal>
+  <ngx-spinner name="clientDetailSpinner" bdColor="rgba(244,243,238,0.8)" size="medium" color="#78756f"
+               type="ball-atom"
+               [fullScreen]="false"></ngx-spinner>
+  <div class="modal-header">
+    <h3 class="modal-title" id="modal-basic-title">Confidencial</h3>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row mx-0">
+      <div
+        *ngIf="this.commonService.isAllowed(['CanEditClientLinner']); then editLinnerTemplate else readOnlyLinnerTemplate"></div>
+      <div
+        *ngIf="this.commonService.isAllowed(['CanEditClientCloser']); then editCloserTemplate else readOnlyCloserTemplate"></div>
+      <div
+        *ngIf="this.commonService.isAllowed(['CanEditClientTlmkCode']); then editTlmkCodeTemplate else readOnlyTlmkCodeTemplate"></div>
+      <ng-template #editLinnerTemplate>
+        <div class="col-md-2 px-1">
+          <div class="form-group">
+            <label><b>Linner:</b></label>
+            <select [(ngModel)]="selectedLinner" style="width: 100%;">
+              <option value="null">Seleccione...</option>
+              <option *ngFor="let linnerOpt of linnerList"
+                      [value]="linnerOpt">{{linnerOpt}}</option>
+            </select>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template #editCloserTemplate>
+        <div class="col-md-2 px-1">
+          <div class="form-group">
+            <label><b>Closer:</b></label>
+            <select [(ngModel)]="selectedCloser" style="width: 100%;">
+              <option value="null">Seleccione...</option>
+              <option *ngFor="let closerOpt of closerList"
+                      [value]="closerOpt">{{closerOpt}}</option>
+            </select>
+          </div>
+        </div>
+      </ng-template>
+      <ng-template #editTlmkCodeTemplate>
+        <div class="col-md-2 px-1">
+          <div class="form-group">
+            <label><b>Codigo TLMK</b></label>
+            <input [(ngModel)]="tlmkCode"
+                   style="padding: 1px;"
+                   type="text"
+                   class="form-control"
+                   maxlength="50"
+                   placeholder="Codigo TLMK">
+          </div>
+        </div>
+      </ng-template>
+      <ng-template #readOnlyLinnerTemplate>
+        <div class="col-md-2 px-1">
+          <p class="my-1"><b>Linner:</b><br/>{{client.linner || '-'}}</p>
+        </div>
+      </ng-template>
+      <ng-template #readOnlyCloserTemplate>
+        <div class="col-md-2 px-1">
+          <p class="my-1"><b>Closer:</b><br/> {{client.closer || '-'}}</p>
+        </div>
+      </ng-template>
+      <ng-template #readOnlyTlmkCodeTemplate>
+        <div class="col-md-2 px-1">
+          <p class="my-1"><b>Codigo TLMK:</b><br/> {{client.tlmkCode || '-'}}</p>
+        </div>
+      </ng-template>
+      <div class="col-md px-1">
+        <p class="my-1"><b>Fecha:</b><br/>{{client.date ? (client.date | date: 'dd-MM-yyyy') : '-'}}</p>
+      </div>
+      <div class="col-md-1 px-1">
+        <p class="my-1"><b>Mesa:</b><br/>{{client.tableNumber || '-'}}</p>
+      </div>
+      <div class="col-md px-1">
+        <p class="my-1"><b>Llegada:</b><br/> {{client.arrivalTime || '-'}}</p>
+      </div>
+      <div class="col-md px-1">
+        <p class="my-1"><b>Salida:</b><br/>{{client.wayOutTime || '-'}}</p>
+      </div>
+    </div>
+    <div class="row mx-0 mt-0">
+      <div class="col-md-12 px-1">
+        <hr/>
+      </div>
+    </div>
+    <div class="row mx-0 mt-2">
+      <div class="col-md-4 px-2">
+        <p class="my-1">
+          <b>Titular:</b>
+          {{((client.name || '') + ' ' + (client.lastName || '')) || '-'}}
+        </p>
+        <p class="my-1"><b>Profesion:</b> {{client.profession || '-'}}</p>
+        <p class="my-1"><b>Edad:</b> {{client.age || '-'}}</p>
+        <p class="my-1"><b>Tipo doc:</b> {{client.documentType || '-'}}</p>
+        <p class="my-1"><b>Num. doc:</b> {{client.documentNumber || '-'}}</p>
+        <p class="my-1"><b>Telefono:</b> {{client.phoneNumber || '-'}}</p>
+        <p class="my-1"><b>Email:</b> {{client.email || '-'}}</p>
+        <p class="my-1">
+          <b>Ingresos:</b>
+          {{client.monthlyIncome ? (client.monthlyIncome |  currency:'USD':'symbol':'0.0') : '-'}}
+        </p>
+        <p class="my-1">
+          <b>Ha trabajado o trabaja en la industria del turismo?:</b>
+          {{client.hasWorkedWithTourismIndustry === true ? 'Si' : 'No'}}
+        </p>
+      </div>
+      <div class="col-md-4 px-2 separator-left separator-right">
+        <p class="my-1">
+          <b>Cotitular:</b>
+          {{((client.coOwnerName || '-') + ' ' + (client.coOwnerLastName || '-'))}}
+        </p>
+        <p class="my-1"><b>Profesion:</b> {{client.coOwnerProfession || '-'}}</p>
+        <p class="my-1"><b>Edad:</b> {{client.coOwnerAge || '-'}}</p>
+        <p class="my-1"><b>Tipo doc:</b> {{client.coOwnerDocumentType || '-'}}</p>
+        <p class="my-1"><b>Num. doc:</b> {{client.coOwnerDocumentNumber || '-'}}</p>
+        <p class="my-1"><b>Telefono:</b> {{client.coOwnerPhoneNumber || '-'}}</p>
+        <p class="my-1"><b>Email:</b> {{client.coOwnerEmail || '-'}}</p>
+        <p class="my-1">
+          <b>Ingresos:</b>
+          {{client.coOwnerMonthlyIncome ? (client.coOwnerMonthlyIncome |  currency:'USD':'symbol':'0.0') : '-'}}
+        </p>
+        <p class="my-1">
+          <b>Ha trabajado o trabaja en la industria del turismo?:</b>
+          {{client.coOwnerHasWorkedWithTourismIndustry === true ? 'Si' : 'No'}}
+        </p>
+      </div>
+      <div class="col-md-4 px-2">
+        <p class="my-1"><b>Estado civil:</b> {{client.maritalStatus || '-'}}</p>
+        <p class="my-1"><b>Hijos:</b> {{client.sons || '-'}}</p>
+        <p class="my-1"><b>Tipo de vivienda:</b> {{client.housingType || '-'}}</p>
+        <p class="my-1"><b>Barrio:</b> {{client.neighborhood || '-'}}</p>
+        <p class="my-1"><b>Poseen automovil:</b> {{client.hasCar === true ? 'Si' : 'No'}}</p>
+        <p class="my-1"><b>Marca/Año:</b> {{client.carBrandModel || '-'}}</p>
+        <p class="my-1"><b>Bancos titular (Debito/credito):</b> {{client.debitCreditBanks || '-'}}</p>
+        <p class="my-1"><b>Bancos cotitular (Debito/credito):</b> {{client.coOwnerDebitCreditBanks || '-'}}</p>
+        <p class="my-1"><b>Bono:</b> {{client.voucher || '-'}}</p>
+      </div>
+    </div>
+    <div class="row mx-0 mt-0">
+      <div class="col-md-12 px-1">
+        <hr/>
+      </div>
+    </div>
+    <div class="row mx-0">
+      <div class="col-md-6 px-1 separator-right">
+        <ng-container *ngIf="client.clientDebitCreditCards && client.clientDebitCreditCards.length > 0">
+          <h6 class="card-subtitle my-3 text-center">Tarjetas titular</h6>
+          <div class="row mx-0">
+            <ng-container *ngFor="let creditDebitCard of client.clientDebitCreditCards">
+              <div class="col-md-6 px-1">
+                <div class="card">
+                  <div class="card-body">
+                    <p class="my-1"><b>Tipo:</b> {{creditDebitCard.cardType}}</p>
+                    <p class="my-1"><b>Franquicia:</b> {{creditDebitCard.franchiseName}}</p>
+                    <p class="my-1"><b>Banco:</b> {{creditDebitCard.bankName}}</p>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+      </div>
+      <div class="col-md-6 px-1 separator-left">
+        <ng-container *ngIf="client.coOwnerDebitCreditCards && client.coOwnerDebitCreditCards.length > 0">
+          <h6 class="card-subtitle my-3 text-center">Tarjetas cotitular</h6>
+          <div class="row mx-0">
+            <ng-container *ngFor="let creditDebitCard of client.coOwnerDebitCreditCards">
+              <div class="col-md-6 px-1">
+                <div class="card">
+                  <div class="card-body">
+                    <p class="my-1"><b>Tipo:</b> {{creditDebitCard.cardType}}</p>
+                    <p class="my-1"><b>Franquicia:</b> {{creditDebitCard.franchiseName}}</p>
+                    <p class="my-1"><b>Banco:</b> {{creditDebitCard.bankName}}</p>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="row mx-0">
+      <div
+        *ngIf="this.commonService.isAllowed(['CanEditClientLinner','CanEditClientCloser','CanEditClientTlmkCode']); then editTemplateBtns else readOnlyTemplateBtns"></div>
+      <ng-template #editTemplateBtns>
+        <div class="col-md-6 px-1 mt-2 text-center">
+          <button
+            type="submit" class="btn btn-primary btn-round" (click)="modal.dismiss()">
+            Salir
+          </button>
+        </div>
+        <div class="col-md-6 px-1 mt-2 text-center">
+          <button type="button" class="btn btn-primary btn-round" (click)="saveChanges()">
+            Guardar
+          </button>
+        </div>
+      </ng-template>
+      <ng-template #readOnlyTemplateBtns>
+        <div class="col-md-12 px-1 mt-2 text-center">
+          <button
+            type="submit" class="btn btn-primary btn-round" (click)="modal.dismiss()">
+            Salir
+          </button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</ng-template>

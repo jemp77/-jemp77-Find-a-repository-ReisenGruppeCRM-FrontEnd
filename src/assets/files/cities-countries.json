@@ -1,0 +1,34 @@
+[
+  {
+    "name": "New York",
+    "type": "city",
+    "country": "United States"
+  },
+  {
+    "name": "Los Angeles",
+    "type": "city",
+    "country": "United States"
+  },
+  {
+    "name": "Paris",
+    "type": "city",
+    "country": "France"
+  },
+  {
+    "name": "London",
+    "type": "city",
+    "country": "United Kingdom"
+  },
+  {
+    "name": "United States",
+    "type": "country"
+  },
+  {
+    "name": "France",
+    "type": "country"
+  },
+  {
+    "name": "United Kingdom",
+    "type": "country"
+  }
+]

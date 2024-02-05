@@ -1,0 +1,282 @@
+<div id="home">
+  <div class="home-background">
+    <div class="container-fluid pl-0 pr-0">
+      <header class="header">
+        <div class="logo">
+          <img src="../../../assets/img/smartCard-logo.png" alt="Smart Card">
+        </div>
+      </header>
+      <section class="welcome-section">
+        <div class="welcome-content">
+          <h1 class="mb-5">Bienvenido a la Aventura</h1>
+          <p class="mx-2">Descubre destinos increíbles con nuestra agencia de viajes</p>
+          <p>Explora el mundo y crea recuerdos inolvidables</p>
+          <button class="btn btn-primary btn-round mt-4" (click)="goToSection('contactFormSection')">
+            Empieza Ahora
+          </button>
+        </div>
+      </section>
+      <section class="video-section" *ngIf="videoUrl">
+        <div class="section-title mb-3">
+          <h1>Acerca de nosotros</h1>
+        </div>
+        <div class="row mx-4">
+          <div class="card col-md-7 mx-auto my-4 px-2">
+            <div class="card-body mx-1 px-1 mt-1">
+              <iframe src="https://crmservice.smartcard.com.co/Videos/Bienvenido.mp4" allowfullscreen></iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="carousel-section mx-auto mt-5" *ngIf="carouselItems.length > 0">
+        <div class="section-title mb-5">
+          <h1>Nuestras promociones del mes</h1>
+        </div>
+        <carousel [arrows]="false" [dots]="false" [width]="screenWidth" [autoplay]="true"
+                  [transitionDuration]="1000" [cellsToShow]="screenWidth < 800? 1: 4">
+          <ng-container *ngFor="let carouselItem of carouselItems">
+            <div class="carousel-cell">
+              <div class="col-md">
+                <div class="card mx-2">
+                  <!--<div class="card-header">
+                    <h5 class="card-title">{{carouselItem.title}}</h5>
+                  </div> -->
+                  <div class="card-body">
+                    <img alt="promo-image" src="{{carouselItem.imageUrl}}" style="height: auto">
+                    <!--<p class="mt-4">{{carouselItem.description}}</p>-->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </carousel>
+      </section>
+      <section class="allies-section mx-auto mt-3 mb-4">
+        <div class="section-title mb-5">
+          <h1>Nuestros aliados</h1>
+        </div>
+        <div class="row mx-5">
+          <ng-container *ngFor="let ally of allies">
+            <div class="card col-md-2">
+              <div class="card-body d-flex align-items-center">
+                <img class="my-auto py-3" alt="ally-logo" src="../../../assets/img/thumbnails/{{ally.logo}}">
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </section>
+      <section id="contactFormSection" class="contact-form-section mx-auto">
+        <div class="section-title">
+          <h1>Que estás esperando?</h1>
+        </div>
+        <div class="row mx-4">
+          <div class="card contact-form col-md-7 mx-auto my-4 px-2">
+            <ngx-spinner name="contactFormSpinner" bdColor="rgba(244,243,238,0.8)" size="medium" color="#78756f"
+                         type="ball-atom"
+                         [fullScreen]="false"></ngx-spinner>
+            <div class="card-header mt-2">
+              <h5 class="card-title text-center">Cotiza con nosotros</h5>
+            </div>
+            <div class="card-body mx-1 px-1 mt-1">
+              <form #contactForm="ngForm" (ngSubmit)="submit()">
+                <div class="row mx-1">
+                  <div class="col-md-4 px-1">
+                    <div class="form-group my-2">
+                      <label>Destino *</label>
+                      <input
+                        #destination="ngModel"
+                        [(ngModel)]="contactFormObj.destination"
+                        [ngbTypeahead]="search"
+                        [editable]='false'
+                        id="destinationTypeahead"
+                        name="destination"
+                        type="text"
+                        class="form-control"
+                        placeholder="Destino" required/>
+                      <app-inline-error
+                        *ngIf="!contactForm.submitted && destination.touched && destination.errors?.required"
+                        [error]="'este campo es obligatorio.'"></app-inline-error>
+                    </div>
+                  </div>
+                  <div class="col-md-4 px-1">
+                    <div class="form-group my-2">
+                      <label>Desde *</label>
+                      <input
+                        #arrivalDate="ngModel"
+                        [(ngModel)]="contactFormObj.arrivalDate"
+                        (ngModelChange)="validateRange()"
+                        name="arrivalDate"
+                        type="date"
+                        class="form-control" required>
+                      <app-inline-error
+                        *ngIf="!contactForm.submitted && arrivalDate.touched && arrivalDate.errors?.required"
+                        [error]="'este campo es obligatorio.'">
+                      </app-inline-error>
+                      <app-inline-error *ngIf="!isDateRangeValid"
+                                        [error]="'Seleccione un rango valido.'"></app-inline-error>
+                    </div>
+                  </div>
+                  <div class="col-md-4 px-1">
+                    <div class="form-group my-2">
+                      <label>Hasta *</label>
+                      <input
+                        #departureDate="ngModel"
+                        [(ngModel)]="contactFormObj.departureDate"
+                        (ngModelChange)="validateRange()"
+                        name="departureDate"
+                        type="date"
+                        class="form-control" required>
+                      <app-inline-error
+                        *ngIf="!contactForm.submitted && departureDate.touched && departureDate.errors?.required"
+                        [error]="'este campo es obligatorio.'">
+                      </app-inline-error>
+                    </div>
+                  </div>
+                  <div class="form-group col-md-12 px-1">
+                    <label for="contactFormName">Nombre completo *</label>
+                    <input
+                      #name="ngModel"
+                      [(ngModel)]="contactFormObj.name"
+                      id="contactFormName"
+                      name="name"
+                      type="text"
+                      class="form-control"
+                      placeholder="Nombre completo" required>
+                    <app-inline-error *ngIf="!contactForm.submitted && name.touched && name.errors?.required"
+                                      [error]="'este campo es obligatorio.'"></app-inline-error>
+                  </div>
+                  <div class="form-group col-md-6 px-1">
+                    <label for="contactFormEmail">Correo electronico *</label>
+                    <input
+                      #email="ngModel"
+                      [(ngModel)]="contactFormObj.email"
+                      id="contactFormEmail"
+                      name="email"
+                      type="email"
+                      class="form-control"
+                      placeholder="nombre@ejemplo.com" required email>
+                    <app-inline-error *ngIf="!contactForm.submitted && email.touched && email.errors?.email"
+                                      [error]="'ingrese un email valido.'"></app-inline-error>
+                    <app-inline-error *ngIf="!contactForm.submitted && email.touched && email.errors?.required"
+                                      [error]="'este campo es obligatorio.'"></app-inline-error>
+                  </div>
+                  <div class="form-group col-md-6 px-1">
+                    <label for="contactFormCellphone">Celular *</label>
+                    <input
+                      #cellphone="ngModel"
+                      [(ngModel)]="contactFormObj.cellphone"
+                      id="contactFormCellphone"
+                      name="cellphone"
+                      type="tel"
+                      class="form-control"
+                      placeholder="XXX-XXX-XXXX" required>
+                    <app-inline-error *ngIf="!contactForm.submitted && cellphone.touched && cellphone.errors?.required"
+                                      [error]="'este campo es obligatorio.'"></app-inline-error>
+                  </div>
+                  <div class="col-md-12 px-1">
+                    <h5 class="text-center mt-2 mb-0">Habitaciones</h5>
+                  </div>
+                  <ng-container *ngFor="let room of contactFormObj.rooms; let roomIndex = index">
+                    <div class="col-md-12 px-0">
+                      <hr class="mt-2 mb-2">
+                    </div>
+                    <div class="col-md-12 px-1">
+                      <label>Habitacion {{roomIndex + 1}}</label>
+                    </div>
+                    <div class="col-md-5 px-1">
+                      <div class="form-group">
+                        <label>Numero de adultos *</label>
+                        <input
+                          #adults="ngModel"
+                          [(ngModel)]="room.adults"
+                          name="adults_{{roomIndex}}"
+                          type="number"
+                          min="1"
+                          max="6"
+                          class="form-control"
+                          placeholder="Adultos" required>
+                        <app-inline-error *ngIf="!contactForm.submitted && adults.touched && adults.errors?.required"
+                                          [error]="'este campo es obligatorio.'"></app-inline-error>
+                        <app-inline-error *ngIf="!contactForm.submitted && adults.touched && adults.errors?.min"
+                                          [error]="'el numero minimo es 1 adulto.'"></app-inline-error>
+                        <app-inline-error *ngIf="!contactForm.submitted && adults.touched && adults.errors?.max"
+                                          [error]="'el numero maximo es 6 adultos.'"></app-inline-error>
+                      </div>
+                    </div>
+                    <div class="col-md-5 px-1">
+                      <div class="form-group">
+                        <label>Numero de niños</label>
+                        <input
+                          #kids="ngModel"
+                          [(ngModel)]="room.kids"
+                          (ngModelChange)="onKidsNumberChange(roomIndex)"
+                          name="kids_{{roomIndex}}"
+                          type="number"
+                          min="0"
+                          max="5"
+                          class="form-control"
+                          placeholder="Niños">
+                        <app-inline-error *ngIf="!contactForm.submitted && kids.touched && kids.errors?.max"
+                                          [error]="'el numero maximo es 5 niños.'"></app-inline-error>
+                      </div>
+                    </div>
+                    <div class="col-md-2 px-1 text-center">
+                      <button *ngIf="roomIndex === 0"
+                              (click)="addRoom()"
+                              type="button" class="btn btn-primary btn-round mt-4 mb-1">
+                        Añadir
+                      </button>
+                      <button *ngIf="roomIndex > 0"
+                              (click)="removeRoom(roomIndex)"
+                              type="button" class="btn btn-primary btn-round mt-4 mb-1">
+                        Borrar
+                      </button>
+                    </div>
+                    <ng-container *ngIf="kids.value > 0 && kids.valid">
+                      <div class="col-md-10 px-1">
+                        <div class="row mx-1">
+                          <ng-container
+                            *ngFor="let age of room.kidsAges; let ageIndex = index">
+                            <div class="col-md px-1">
+                              <div class="form-group">
+                                <label>Edad niño {{ageIndex + 1}} *</label>
+                                <input
+                                  #kidAge="ngModel"
+                                  [(ngModel)]="age.value"
+                                  name="kidAge_{{roomIndex}}_{{ageIndex}}"
+                                  type="number"
+                                  min="1"
+                                  max="17"
+                                  class="form-control"
+                                  placeholder="Edad"
+                                  [required]="kids.value > 0 && kids.valid">
+                                <app-inline-error *ngIf="!contactForm.submitted && kidAge.touched && kidAge.errors?.max"
+                                                  [error]="'la edad maxima es 17 años.'"></app-inline-error>
+                                <app-inline-error *ngIf="!contactForm.submitted && kidAge.touched && kidAge.errors?.min"
+                                                  [error]="'la edad minima es 1 año.'"></app-inline-error>
+                              </div>
+                            </div>
+                          </ng-container>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </ng-container>
+                </div>
+                <div class="row">
+                  <div class="update ml-auto mr-auto">
+                    <button
+                      [disabled]="loadingContactFormSubmit || contactForm.invalid"
+                      type="submit" class="btn btn-primary btn-round">
+                      Enviar
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <app-footer></app-footer>
+  </div>
+</div>

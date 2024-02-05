@@ -1,0 +1,388 @@
+<section id="contractDetail">
+  <div class="row">
+    <div class="col-md-12">
+      <ngx-spinner name="contractDetailSpinner" bdColor="rgba(244,243,238,0.8)" size="large" color="#78756f"
+                   type="ball-atom"
+                   [fullScreen]="true"></ngx-spinner>
+      <div class="card">
+        <div class="card-body">
+          <ul ngbNav #nav="ngbNav" [(activeId)]="activeTabId" class="nav-tabs">
+            <li [ngbNavItem]="1">
+              <a ngbNavLink>Detalle Contrato</a>
+              <ng-template ngbNavContent>
+                <div class="row mx-0 mt-2">
+                  <ng-container *ngIf="contract">
+                    <div class="col-md-12 px-0 mb-2">
+                      <h6 class="card-subtitle my-2">Datos Generales</h6>
+                    </div>
+                    <div class="col-md-4 col-lg-3 px-1">
+                      <p [class.text-success]="(contract.status === 'generated' || contract.status === 'edited')"
+                         [class.text-danger]="(contract.status === 'canceled')"
+                         class="my-1"><b class="text-black">Numero de contrato:</b> {{contract.contractNumber}}</p>
+                    </div>
+                    <div class="col-md-4 col-lg-3 px-1">
+                      <p class="my-1"><b>Fecha:</b> {{contract.contractDate | date: 'dd-MM-yyyy'}}</p>
+                    </div>
+                    <div class="col-md-12 px-0">
+                      <hr class="mt-2 mb-2">
+                    </div>
+                    <ng-container *ngIf="contract.client">
+                      <div class="col-md-12 px-0 mb-2">
+                        <h6 class="card-subtitle my-2">Datos de cliente</h6>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Nombre:</b> {{contract.client.name || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Apellido:</b> {{contract.client.lastName || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Tipo doc:</b> {{contract.client.documentType || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Num. Doc:</b> {{contract.client.documentNumber || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Email:</b> {{contract.client.email || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Telefono:</b> {{contract.client.phoneNumber || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Profesion:</b> {{contract.client.profession || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Pais:</b> {{contract.client.country || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Departamento:</b> {{contract.client.department || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Ciudad:</b> {{contract.client.city || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Direccion:</b> {{contract.client.address || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Oficina:</b> {{contract.client.office || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Celular:</b> {{contract.client.cellPhone || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Fecha nacimiento:</b>
+                          {{contract.client.birthDate ? (contract.client.birthDate | date: 'dd-MM-yyyy') : '-'}}
+                        </p>
+                      </div>
+                      <div class="col-md-12 px-0">
+                        <hr class="mt-2 mb-2">
+                      </div>
+                      <div class="col-md-12 px-0 mb-2">
+                        <h6 class="card-subtitle my-2">Datos de cotitular</h6>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Nombre:</b> {{contract.client.coOwnerName || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Apellido:</b> {{contract.client.coOwnerLastName || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Tipo doc:</b> {{contract.client.coOwnerDocumentType || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Num. Doc:</b> {{contract.client.coOwnerDocumentNumber || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Email:</b> {{contract.client.coOwnerEmail || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Telefono:</b> {{contract.client.coOwnerPhoneNumber || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Profesion:</b> {{contract.client.coOwnerProfession || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Pais:</b> {{contract.client.coOwnerCountry || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Departamento:</b> {{contract.client.coOwnerDepartment || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Ciudad:</b> {{contract.client.coOwnerCity || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Direccion:</b> {{contract.client.coOwnerAddress || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Oficina:</b> {{contract.client.coOwnerOffice || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Celular:</b> {{contract.client.coOwnerCellphone || '-'}}</p>
+                      </div>
+                      <div class="col-md-4 col-lg-3 px-1">
+                        <p class="my-1"><b>Fecha nacimiento:</b>
+                          {{contract.client.coOwnerBirthDate ? (contract.client.coOwnerBirthDate | date: 'dd-MM-yyyy') : '-'}}
+                        </p>
+                      </div>
+                      <div class="col-md-12 px-0">
+                        <hr class="mt-2 mb-2">
+                      </div>
+                    </ng-container>
+                    <ng-container *ngIf="contract.contractBeneficiaries && contract.contractBeneficiaries.length > 0">
+                      <div class="col-md-12 px-0 mb-2">
+                        <h6 class="card-subtitle my-2">Beneficiarios</h6>
+                      </div>
+                      <ng-container *ngFor="let beneficiary of contract.contractBeneficiaries">
+                        <div class="col-md-4 col-lg-3 px-1">
+                          <p class="my-1"><b>Nombres:</b> {{beneficiary.names || '-'}}</p>
+                        </div>
+                        <div class="col-md-4 col-lg-3 px-1">
+                          <p class="my-1"><b>Apellidos:</b> {{beneficiary.lastNames || '-'}}</p>
+                        </div>
+                        <div class="col-md-4 col-lg-3 px-1">
+                          <p class="my-1"><b>Tipo doc:</b> {{beneficiary.documentType || '-'}}</p>
+                        </div>
+                        <div class="col-md-4 col-lg-3 px-1">
+                          <p class="my-1"><b>Num. Doc:</b> {{beneficiary.documentNumber || '-'}}</p>
+                        </div>
+                      </ng-container>
+                      <div class="col-md-12 px-0">
+                        <hr class="mt-2 mb-2">
+                      </div>
+                    </ng-container>
+                    <div class="col-md-12 px-0 mb-2">
+                      <h6 class="card-subtitle my-2">Ingreso</h6>
+                    </div>
+                    <div class="col-md-4 col-lg-3 px-1">
+                      <p class="my-1"><b>A&ntilde;os de duracion:</b> {{contract.durationYears || '-'}}</p>
+                    </div>
+                    <div class="col-md-4 col-lg-3 px-1">
+                      <p class="my-1"><b>Valor membresia:</b>
+                        {{contract.membershipPrice ? (contract.membershipPrice |  currency:'USD':'symbol':'0.0') : '$0'}}
+                      </p>
+                    </div>
+                    <div class="col-md-4 col-lg-3 px-1">
+                      <p class="my-1"><b>Valor ingreso:</b>
+                        {{contract.entryPrice ? (contract.entryPrice |  currency:'USD':'symbol':'0.0') : '$0'}}
+                      </p>
+                    </div>
+                    <div class="col-md-4 col-lg-3 px-1">
+                      <p class="my-1"><b>Valor CUI:</b>
+                        {{contract.cuiPrice ? (contract.cuiPrice |  currency:'USD':'symbol':'0.0') : '$0'}}
+                      </p>
+                    </div>
+                    <div class="col-md-4 col-lg-3 px-1">
+                      <p class="my-1"><b>Valor a financiar:</b>
+                        {{contract.lendValue ? (contract.lendValue |  currency:'USD':'symbol':'0.0') : '$0'}}
+                      </p>
+                    </div>
+                    <div class="col-md-4 col-lg-3 px-1">
+                      <p class="my-1"><b>Cuotas:</b> {{contract.lendInstallments || '-'}}</p>
+                    </div>
+                    <div class="col-md-4 col-lg-3 px-1">
+                      <p class="my-1"><b>Valor cuota:</b>
+                        {{contract.lendInstallmentPrice ? (contract.lendInstallmentPrice |  currency:'USD':'symbol':'0.0') : '$0'}}
+                      </p>
+                    </div>
+                    <div class="col-md-4 col-lg-3 px-1">
+                      <p class="my-1"><b>Fecha cuota:</b>
+                        {{contract.lendInstallmentDate ? (contract.lendInstallmentDate | date: 'dd-MM-yyyy') : '-'}}
+                      </p>
+                    </div>
+                    <div class="col-md-12 px-0">
+                      <hr class="mt-2 mb-2">
+                    </div>
+                    <div class="col-md-12 px-0 mb-2">
+                      <h6 class="card-subtitle my-2">Modo de pago</h6>
+                    </div>
+                    <div class="col-md-4 col-lg-3 px-1">
+                      <p class="my-1"><b>Tarjeta debito:</b>
+                        {{contract.debitCardPayment ? (contract.debitCardPayment |  currency:'USD':'symbol':'0.0') : '$0'}}
+                      </p>
+                    </div>
+                    <div class="col-md-4 col-lg-3 px-1">
+                      <p class="my-1"><b>Tarjeta credito:</b>
+                        {{contract.creditCardPayment ? (contract.creditCardPayment |  currency:'USD':'symbol':'0.0') : '$0'}}
+                      </p>
+                    </div>
+                    <div class="col-md-4 col-lg-3 px-1">
+                      <p class="my-1"><b>Trans. Bancaria:</b>
+                        {{contract.transferPayment ? (contract.transferPayment |  currency:'USD':'symbol':'0.0') : '$0'}}
+                      </p>
+                    </div>
+                    <div class="col-md-4 col-lg-3 px-1">
+                      <p class="my-1"><b>Efectivo:</b>
+                        {{contract.cashPayment ? (contract.cashPayment |  currency:'USD':'symbol':'0.0') : '$0'}}
+                      </p>
+                    </div>
+                    <div class="col-md-12 px-0">
+                      <hr class="mt-2 mb-2">
+                    </div>
+                    <div class="col-12 px-1">
+                      <p class="my-1"><b>Observaciones:</b> <br>{{contract.observations || '-'}}</p>
+                    </div>
+                  </ng-container>
+                </div>
+              </ng-template>
+            </li>
+            <li [ngbNavItem]="2">
+              <a ngbNavLink>Servicio al cliente</a>
+              <ng-template ngbNavContent>
+                <div class="row mx-0 mt-2">
+                  <div class="col-md-12 px-0 mb-2">
+                    <h6 class="card-subtitle my-2">Datos de contrato</h6>
+                  </div>
+                  <div class="col-md-4 col-lg-3 px-1">
+                    <p class="my-1"><b>Nombre:</b> {{contract.client.name || '-'}}</p>
+                  </div>
+                  <div class="col-md-4 col-lg-3 px-1">
+                    <p class="my-1"><b>Apellido:</b> {{contract.client.lastName || '-'}}</p>
+                  </div>
+                  <div class="col-md-4 col-lg-3 px-1">
+                    <p class="my-1"><b>Tipo doc:</b> {{contract.client.documentType || '-'}}</p>
+                  </div>
+                  <div class="col-md-4 col-lg-3 px-1">
+                    <p class="my-1"><b>Num. Doc:</b> {{contract.client.documentNumber || '-'}}</p>
+                  </div>
+                  <div class="col-md-4 col-lg-3 px-1">
+                    <p class="my-1"><b>A&ntilde;os de duracion:</b> {{contract.durationYears || '-'}}</p>
+                  </div>
+                  <div class="col-md-4 col-lg-3 px-1">
+                    <p class="my-1"><b>Valor contrato:</b>
+                      {{contract.membershipPrice ? (contract.membershipPrice |  currency:'USD':'symbol':'0.0') : '$0'}}
+                    </p>
+                  </div>
+                  <div class="col-md-12 px-0">
+                    <hr class="mt-2 mb-2">
+                  </div>
+                  <div class="col-md-12 px-0 mb-2">
+                    <h6 class="card-subtitle my-2">Nuevo servicio al cliente</h6>
+                  </div>
+                  <div class="col-md-4 px-1">
+                    <div class="form-group">
+                      <label for="customerServiceDate">Fecha Observacion</label>
+                      <input id="customerServiceDate" [(ngModel)]="customerService.observationDate"
+                             type="datetime-local"
+                             class="form-control" [max]="maxCustomerServiceObservationDate">
+                    </div>
+                  </div>
+                  <div class="col-md-12 px-1">
+                    <div class="form-group">
+                      <label>
+                        Observaciones
+                      </label>
+                      <span class="font-weight-bolder text-danger"> *</span>
+                      <textarea
+                        [(ngModel)]="customerService.observations"
+                        rows="10"
+                        placeholder="Observaciones"
+                        class="form-control">
+                      </textarea>
+                    </div>
+                  </div>
+                  <div class="col-md-2 px-1 mb-2">
+                    <div class="form-group">
+                      <button class="btn btn-primary btn-round">
+                        Seleccionar archivos
+                        <input type="file" (change)="handleUpload($event)"/>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-md-8 px-1 mb-2">
+                    <ng-container *ngFor="let file of customerService.customerServiceObservationFiles">
+                      <p class="my-1">{{file.fileName}}
+                        <fa-icon class="mx-1"
+                                 [ngbTooltip]="'Remover Archivo'"
+                                 [icon]="faTimes"
+                                 (click)="removeFile(file)"></fa-icon>
+                      </p>
+                    </ng-container>
+                  </div>
+                  <div class="col-md-2 px-1 mb-2">
+                    <button type="button"
+                            [disabled]="!customerService.observations ||customerService.observations === ''"
+                            (click)="submitObservation()" class="btn btn-primary btn-round">
+                      Guardar observacion
+                    </button>
+                  </div>
+                </div>
+                <div class="row mx-0">
+                  <div class="col-md-12 px-0 mb-2">
+                    <h6 class="card-subtitle my-2">Historial de observaciones</h6>
+                  </div>
+                  <ng-container *ngIf="!contractCustomerServices || contractCustomerServices.length === 0">
+                    <div class="col-md-12 px-0 mb-2">
+                      <div class="card card-full-border text-center">
+                        <div class="card-header">
+                          <h5 class="card-title my-5">No hay observaciones para mostrar.</h5>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngFor="let observation of contractCustomerServices">
+                    <div class="col-md-12 px-0 mb-2">
+                      <div class="card card-full-border">
+                        <div class="card-body">
+                          <div class="row mx-0">
+                            <div class="col-md-12 px-1">
+                              <p class="my-1 pull-left">
+                                <b>Fecha:</b> {{observation.observationDate | date: 'dd/MM/yyyy, hh:mm a'}}
+                              </p>
+                              <ng-container
+                                *ngIf="commonService.isAllowed(['CanEditCustomerServiceObservations'])">
+                                <fa-icon *ngIf="!observation.isEditing" class="mx-1 pull-right"
+                                         [ngbTooltip]="'Editar observacion'"
+                                         [icon]="editObservationIcon"
+                                         (click)="toggleEditObservation(observation)"></fa-icon>
+                                <fa-icon *ngIf="observation.isEditing" class="mx-1 pull-right"
+                                         [ngbTooltip]="'Cancelar edicion'"
+                                         [icon]="faTimes"
+                                         (click)="toggleEditObservation(observation)"></fa-icon>
+                              </ng-container>
+                            </div>
+                            <div class="col-md-12 px-1">
+                              <p class="my-1"><b>Observacion:</b></p>
+                              <ng-container *ngIf="!observation.isEditing">
+                                <p class="my-1">{{observation.observations}}</p>
+                              </ng-container>
+                              <ng-container *ngIf="observation.isEditing">
+                                <div class="form-group mb-0">
+                                  <textarea
+                                    [(ngModel)]="observation.observations"
+                                    rows="10"
+                                    placeholder="Observaciones"
+                                    class="form-control">
+                                  </textarea>
+                                  <div class="text-center">
+                                    <button [disabled]="!observation.observations ||observation.observations === ''"
+                                            type="button" (click)="editObservation(observation)"
+                                            class="btn btn-primary btn-round">
+                                      Guardar
+                                    </button>
+                                  </div>
+                                </div>
+                              </ng-container>
+                            </div>
+                            <div class="col-md-12 px-1"
+                                 *ngIf="observation.customerServiceObservationFiles && observation.customerServiceObservationFiles.length > 0">
+                              <p class="my-1"><b>Archivos:</b></p>
+                              <ng-container *ngFor="let file of observation.customerServiceObservationFiles">
+                                <a (click)="downloadFile(file)" class="my-1 cursor-pointer">{{file.fileName}}</a>
+                                <br>
+                              </ng-container>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+          <div [ngbNavOutlet]="nav" class="mt-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,139 @@
+<section id="searchClientComponent">
+  <div class="row mx-0">
+    <div class="col-md-12 px-1 mx-auto">
+      <ngx-spinner name="genericSearchSpinner" bdColor="rgba(244,243,238,0.8)" size="large" color="#78756f"
+                   type="ball-atom"
+                   [fullScreen]="true"></ngx-spinner>
+      <div class="card">
+        <div class="card-header">
+          <ng-container *ngIf="searchType === 'search-client'">
+            <h3 class="card-title">Buscar cliente</h3>
+          </ng-container>
+          <ng-container *ngIf="searchType === 'search-new-contract'">
+            <h3 class="card-title">Buscar cliente para contrato</h3>
+          </ng-container>
+          <ng-container
+            *ngIf="searchType === 'search-contract' || searchType === 'search-contract-booking' || searchType === 'search-contract-customer-service'">
+            <h3 class="card-title">Buscar contrato</h3>
+          </ng-container>
+        </div>
+        <div class="card-body">
+          <div class="row mx-0">
+            <div class="col-sm-10 px-1">
+              <div class="form-group">
+                <label>
+                  Buscar
+                </label>
+                <input (keyup)="onSearchInputKeyUp($event)" [(ngModel)]="searchText"
+                       type="text" class="form-control">
+              </div>
+            </div>
+            <div class="col-sm-2 px-1 text-md-center">
+              <button
+                type="button" (click)="sendSearch()"
+                class="btn btn-primary btn-round mt-md-4" [disabled]="loadingSearch || !searchText">Buscar
+              </button>
+            </div>
+          </div>
+          <div class="row mx-0 mt-3">
+            <div class="col-md-12 px-2">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead class=" text-primary">
+                  <th class="px-2" *ngFor="let col of resultsColumns">
+                    {{col.title}}
+                  </th>
+                  </thead>
+                  <tbody>
+                  <ng-container *ngIf="searchResults.length > 0">
+                    <tr *ngFor="let data of searchResults">
+                      <td class="px-3" *ngFor="let col of resultsColumns">
+                        <ng-container *ngIf="!col.id.includes('Actions')">
+                          {{data[col.field]}}
+                        </ng-container>
+                        <ng-container *ngIf="col.id === 'clientActions'">
+                          <div class="px-2">
+                            <fa-icon *ngIf="commonService.isAllowed(['CanReadClient'])"
+                                     [ngbTooltip]="'Detalle cliente'"
+                                     [icon]="clientDetailsIcon"
+                                     class="mx-1"
+                                     placement="right"
+                                     (click)="clientDetails(data)">
+                            </fa-icon>
+                            <fa-icon *ngIf="commonService.isAllowed(['CanEditClient'])"
+                                     class="mx-1"
+                                     [ngbTooltip]="'Editar cliente'"
+                                     [icon]="editClientIcon"
+                                     placement="right"
+                                     (click)="editClient(data)">
+                            </fa-icon>
+                            <fa-icon *ngIf="commonService.isAllowed(['CanEditClient'])" class="mx-1"
+                                     [ngbTooltip]="'Salida cliente'" [icon]="outClientIcon"
+                                     (click)="outClient(data)"></fa-icon>
+                          </div>
+                        </ng-container>
+                        <ng-container *ngIf="col.id === 'newContractActions'">
+                          <div class="px-2">
+                            <fa-icon class="mx-1" [ngbTooltip]="'Generar Contrato'" [icon]="generateContractIcon"
+                                     (click)="generateContract(data)"></fa-icon>
+                          </div>
+                        </ng-container>
+                        <ng-container *ngIf="col.id === 'contractActions'">
+                          <div class="px-2">
+                            <fa-icon *ngIf="commonService.isAllowed(['CanReadContract'])"
+                                     class="mx-1"
+                                     [ngbTooltip]="'Detalle Contrato'"
+                                     [icon]="clientDetailsIcon"
+                                     placement="right"
+                                     (click)="contractDetail(data)">
+                            </fa-icon>
+                            <fa-icon *ngIf="commonService.isAllowed(['CanDownloadContract'])"
+                                     class="mx-1"
+                                     [ngbTooltip]="'Descargar Contrato'"
+                                     [icon]="downloadContractIcon"
+                                     placement="right"
+                                     (click)="downloadContract(data)">
+                            </fa-icon>
+                            <fa-icon *ngIf="commonService.isAllowed(['CanEditContract'])"
+                                     class="mx-1"
+                                     [ngbTooltip]="'Editar Contrato'"
+                                     [icon]="editContractIcon"
+                                     (click)="editContract(data)">
+                            </fa-icon>
+                            <fa-icon *ngIf="commonService.isAllowed(['CanCancelContract'])"
+                                     class="mx-1"
+                                     [ngbTooltip]="'Cancelar Contrato'"
+                                     [icon]="cancelContractIcon"
+                                     (click)="cancelContract(data)">
+                            </fa-icon>
+                          </div>
+                        </ng-container>
+                        <ng-container *ngIf="col.id === 'bookingContractActions'">
+                          <div class="px-2">
+                            <fa-icon class="mx-1" [ngbTooltip]="'Detalle Contrato'" [icon]="contractDetailIcon"
+                                     placement="right"
+                                     (click)="contractDetail(data)"></fa-icon>
+                          </div>
+                        </ng-container>
+                      </td>
+                    </tr>
+                  </ng-container>
+                  <ng-container *ngIf="searchResults.length === 0">
+                    <tr>
+                      <td class="px-2" [colSpan]="resultsColumns?.length -1">
+                        No hay resultados.
+                      </td>
+                    </tr>
+                  </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<app-simple-options-modal #cancelContractOptionsModal [modalModel]="cancelContractModalModel"
+                          (accepted)="onCancelContractAccepted($event)"></app-simple-options-modal>

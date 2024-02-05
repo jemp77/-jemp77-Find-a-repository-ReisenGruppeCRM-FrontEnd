@@ -1,0 +1,34 @@
+<section id="configurationComponent">
+  <div class="row mx-0">
+    <div class="col-md-12 px-1 mx-auto">
+      <ngx-spinner name="configurationSpinner" bdColor="rgba(244,243,238,0.8)" size="large" color="#78756f"
+                   type="ball-atom"
+                   [fullScreen]="true"></ngx-spinner>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Configuracion</h3>
+        </div>
+        <div class="card-body">
+          <div class="row mx-0">
+            <ng-container *ngFor="let configSetting of configurationSettings">
+              <div class="col-md-12 px-1">
+                <div class="form-group">
+                  <label>{{configSetting.key}}</label>
+                  <input [disabled]="!configSetting.isEnabled" type="text" class="form-control"
+                         [(ngModel)]="configSetting.value">
+                </div>
+              </div>
+            </ng-container>
+          </div>
+          <div class="row mx-0">
+            <div class="col-md-12 px-1 mt-2 text-center">
+              <button (click)="saveConfigurationSettings()"
+                      type="submit" class="btn btn-primary btn-round">Guardar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

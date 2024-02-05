@@ -1,0 +1,28 @@
+<ng-template #simpleOptionsModal let-modal>
+  <div class="modal-header">
+    <h3 class="modal-title" id="modal-basic-title">{{modalModel?.title}}</h3>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row mx-0">
+      <div class="col-md-12 px-1 mt-2 text-center">
+        <p>{{modalModel?.description}}</p>
+      </div>
+    </div>
+    <div class="row mx-0">
+      <div class="col-md-6 px-1 mt-2 text-center">
+        <button
+          type="submit" class="btn btn-primary btn-round" (click)="accept()">
+          {{modalModel?.acceptLabel || 'Aceptar'}}
+        </button>
+      </div>
+      <div class="col-md-6 px-1 mt-2 text-center">
+        <button type="button" class="btn btn-primary btn-round" (click)="cancel()">
+          {{modalModel?.cancelLabel || 'Cancelar'}}
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

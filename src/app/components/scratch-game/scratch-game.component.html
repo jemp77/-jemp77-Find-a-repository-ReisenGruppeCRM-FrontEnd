@@ -1,0 +1,52 @@
+<section id="scratch-game">
+  <ngx-spinner name="scratchGameSpinner" bdColor="rgba(244,243,238,0.8)" size="medium" color="#78756f"
+               type="ball-atom"
+               [fullScreen]="true"></ngx-spinner>
+  <div class="right-shadow-bg">
+    <div class="container">
+      <div class="row wrapper wrapper-full-page">
+        <div class="card col-md-12 m-auto">
+          <div class="card-header">
+            <h5 class="card-title text-center">Raspa y Gana</h5>
+            <p class="card-category text-center">Bienvenido al Raspa y gana de SmartCard!.</p>
+          </div>
+          <ng-container *ngIf="!showGame">
+            <div class="card-body">
+              <div class="row">
+                <div class="update ml-auto mr-auto">
+                  <button
+                    (click)="loadGame('win')"
+                    type="submit" class="btn cheat-button-1 btn-primary btn-round text-left">
+                    Conti
+                  </button>
+                  <button
+                    (click)="loadGame('lose')"
+                    type="submit" class="btn cheat-button-2 btn-primary btn-round text-right">
+                    nuar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <div [hidden]="!showGame">
+            <div class="sc__wrapper mt-3 mb-5">
+              <div id="js--sc--container"></div>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="update ml-auto mr-auto">
+                  <button
+                    (click)="reloadGame()"
+                    type="submit" class="btn btn-primary btn-round">
+                    Intentar de nuevo
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<app-celebrate></app-celebrate>

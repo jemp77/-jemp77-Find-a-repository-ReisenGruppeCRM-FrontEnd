@@ -1,0 +1,28 @@
+<ng-template #createClientOptionsModal let-modal>
+  <div class="modal-header">
+    <h3 class="modal-title" id="modal-basic-title">Cliente Creado</h3>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row mx-0">
+      <div class="col-md-12 px-1 mt-2 text-center">
+        <p>El cliente ha sido creado de manera exitosa, por favor escoja una de las siguientes opciones</p>
+      </div>
+    </div>
+    <div class="row mx-0">
+      <div class="col-md-6 px-1 mt-2 text-center">
+        <button
+          type="submit" class="btn btn-primary btn-round" (click)="generateOutClient()">
+          Salida de cliente
+        </button>
+      </div>
+      <div class="col-md-6 px-1 mt-2 text-center">
+        <button type="button" class="btn btn-primary btn-round" (click)="generateContract()">
+          Crear contrato
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

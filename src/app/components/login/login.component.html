@@ -1,0 +1,44 @@
+<section id="login">
+  <div class="right-shadow-bg">
+    <div class="container">
+      <div class="row mx-0 wrapper wrapper-full-page">
+        <div class="col-md-6 m-auto px-0 login-logo text-center">
+          <img src="../../../assets/img/smartCard-logo.png">
+        </div>
+        <div class="card col-md-5 m-auto">
+          <ngx-spinner name="loginSpinner" bdColor="rgba(244,243,238,0.8)" size="medium" color="#78756f"
+                       type="ball-atom"
+                       [fullScreen]="false"></ngx-spinner>
+          <div class="card-header">
+            <h5 class="card-title">Login</h5>
+            <p class="card-category">ingresa tus credenciales.</p>
+          </div>
+          <div class="card-body">
+            <form [formGroup]="loginForm" (ngSubmit)="login()">
+              <div class="form-group">
+                <label for="loginFormUserName">Usuario</label>
+                <input id="loginFormUserName" formControlName="username" type="text" class="form-control"
+                       placeholder="Usuario">
+                <app-inline-error *ngIf="loginForm.get('username').errors && loginForm.get('username').touched"
+                                  [error]="'Este campo es requerido.'"></app-inline-error>
+              </div>
+              <div class="form-group">
+                <label for="loginFormPassword">Contraseña</label>
+                <input id="loginFormPassword" formControlName="password" type="password" class="form-control"
+                       placeholder="Contraseña">
+              </div>
+              <div class="row">
+                <div class="update ml-auto mr-auto">
+                  <button
+                    [disabled]="loadingLogin || loginForm.pristine || loginForm.invalid"
+                    type="submit" class="btn btn-primary btn-round">Login
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

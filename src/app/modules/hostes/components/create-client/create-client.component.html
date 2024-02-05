@@ -1,0 +1,684 @@
+<section id="createClientForm">
+  <div class="row mx-0">
+    <div class="col-md-12 px-1 mx-auto">
+      <ngx-spinner name="createClientSpinner" bdColor="rgba(244,243,238,0.8)" size="large" color="#78756f"
+                   type="ball-atom"
+                   [fullScreen]="true"></ngx-spinner>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">{{clientId ? 'Editar' : 'Crear'}} Cliente</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="createClientForm" (ngSubmit)="submitClientForm()">
+            <div class="row mx-0">
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label for="createClientFormDate">Fecha</label>
+                  <input readonly id="createClientFormDate" formControlName="date" type="date" class="form-control"
+                         placeholder="DD/MM/AAAA">
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label for="createClientFormArrivalTime">Hora llegada</label>
+                  <input readonly id="createClientFormArrivalTime" formControlName="arrivalTime" type="text"
+                         class="form-control"
+                         placeholder="HH:MM">
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label for="createClientFormTableNumber">Mesa</label>
+                  <input id="createClientFormTableNumber" formControlName="tableNumber" type="number"
+                         class="form-control"
+                         min="0"
+                         maxlength="10"
+                         placeholder="Mesa">
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>Linner</label>
+                  <select formControlName="linner"
+                          style="width: 100%; height: 38px">
+                    <option value="null">Seleccione...</option>
+                    <option *ngFor="let linnerOpt of linnerList"
+                            [value]="linnerOpt">{{linnerOpt}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>Closer</label>
+                  <select formControlName="closer"
+                          style="width: 100%; height: 38px">
+                    <option value="null">Seleccione...</option>
+                    <option *ngFor="let closerOpt of closerList"
+                            [value]="closerOpt">{{closerOpt}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>Codigo TLMK</label>
+                  <input formControlName="tlmkCode" type="text"
+                         class="form-control"
+                         maxlength="50"
+                         placeholder="Codigo TLMK">
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-12 px-1">
+                <hr>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-12 px-1">
+                <h6 class="card-subtitle text-center my-2">Datos de titular</h6>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-6 px-1">
+                <div class="form-group">
+                  <label>
+                    Nombre
+                    <span class="font-weight-bolder text-danger"> *</span>
+                  </label>
+                  <input formControlName="name" type="text"
+                         class="form-control"
+                         maxlength="50"
+                         placeholder="Nombre">
+                  <app-inline-error
+                    *ngIf="createClientForm.get('name').errors && createClientForm.get('name').touched"
+                    [error]="'Este campo es requerido.'"></app-inline-error>
+                </div>
+              </div>
+              <div class="col-md-6 px-1">
+                <div class="form-group">
+                  <label>
+                    Apellido
+                    <span class="font-weight-bolder text-danger"> *</span>
+                  </label>
+                  <input formControlName="lastName" type="text"
+                         class="form-control"
+                         maxlength="50"
+                         placeholder="Apellido">
+                  <app-inline-error
+                    *ngIf="createClientForm.get('lastName').errors && createClientForm.get('lastName').touched"
+                    [error]="'Este campo es requerido.'"></app-inline-error>
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>
+                    Genero
+                  </label>
+                  <select formControlName="gender" style="width: 100%; height: 38px">
+                    <option *ngFor="let gender of genresList" [value]="gender.itemId">{{gender.itemLabel}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>Edad</label>
+                  <input formControlName="age" type="number"
+                         min="0"
+                         class="form-control"
+                         maxlength="4"
+                         placeholder="Edad">
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>Profesion</label>
+                  <input formControlName="profession" type="text"
+                         class="form-control"
+                         maxlength="100"
+                         placeholder="Profesion">
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>Tipo de Doc.</label>
+                  <select formControlName="documentType" style="width: 100%; height: 38px">
+                    <option *ngFor="let docType of docTypesList" [value]="docType.itemId">{{docType.itemLabel}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-8 px-1">
+                <div class="form-group">
+                  <label>Numero de documento</label>
+                  <input formControlName="documentNumber" type="text"
+                         class="form-control"
+                         maxlength="20"
+                         placeholder="Numero de documento">
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>Telefono</label>
+                  <input formControlName="phoneNumber" type="text"
+                         class="form-control"
+                         maxlength="20"
+                         placeholder="Telefono">
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>Correo</label>
+                  <input formControlName="email" type="text"
+                         class="form-control"
+                         maxlength="50"
+                         placeholder="Correo">
+                  <app-inline-error
+                    *ngIf="createClientForm?.get('email').errors?.pattern && createClientForm?.get('email').touched"
+                    [error]="'Este campo debe ser un email valido.'"></app-inline-error>
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>Ingresos ($)</label>
+                  <input formControlName="monthlyIncome" type="text"
+                         class="form-control"
+                         [value]="createClientForm?.get('monthlyIncome').value |  currency:'USD':'symbol':'0.0'"
+                         maxlength="50"
+                         placeholder="Ingresos">
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>¿Ha trabajado o trabaja en la industria del turismo?</label>
+                  <div class="btn-group btn-group-toggle" style="width: 100%" ngbRadioGroup
+                       formControlName="hasWorkedWithTourismIndustry"
+                       (ngModelChange)="createClientForm.get('tourismIndustry').setValue(null)">
+                    <label ngbButtonLabel class="btn-simple font-weight-normal mt-0">
+                      <input ngbButton type="radio" [value]="true"> Si
+                    </label>
+                    <label ngbButtonLabel class="btn-simple font-weight-normal mt-0">
+                      <input ngbButton type="radio" [value]="false"> No
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>Cual?</label>
+                  <input [readOnly]="!createClientForm.get('hasWorkedWithTourismIndustry').value"
+                         formControlName="tourismIndustry" type="text"
+                         class="form-control"
+                         maxlength="50"
+                         placeholder="Cual?">
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>Bancos Débito /Crédito</label>
+                  <input formControlName="debitCreditBanks" type="text"
+                         class="form-control"
+                         maxlength="100"
+                         placeholder="Bancos Débito /Crédito">
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label for="createClientFormMaritalStatus">Estado civil</label>
+                  <select (ngModelChange)="onMaritalStatusChange()" formControlName="maritalStatus"
+                          id="createClientFormMaritalStatus"
+                          style="width: 100%; height: 38px">
+                    <option value="Soltero">Soltero</option>
+                    <option value="Casado">Casado</option>
+                    <option value="Union Libre">Union Libre</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label for="createClientFormSons">Cantidad de hijos</label>
+                  <select id="createClientFormSons" formControlName="sons" style="width: 100%; height: 38px">
+                    <option *ngFor="let number of [0,1,2,3,5,4,5,6,8,9,10]" [value]="number">{{number}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label for="createClientFormHousingType">Tipo de vivienda</label>
+                  <select formControlName="housingType" id="createClientFormHousingType"
+                          style="width: 100%; height: 38px">
+                    <option [value]="housingType.itemId"
+                            *ngFor="let housingType of housingTypesList">{{housingType.itemLabel}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label for="createClientFormNeighborhood">Barrio</label>
+                  <input id="createClientFormNeighborhood" formControlName="neighborhood" type="text"
+                         class="form-control"
+                         maxlength="50"
+                         placeholder="Barrio">
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-6 px-1">
+                <div class="form-group">
+                  <label>¿Posee Automovil?</label>
+                  <div class="btn-group btn-group-toggle" style="width: 100%" ngbRadioGroup
+                       formControlName="hasCar"
+                       (ngModelChange)="createClientForm.get('carBrandModel').setValue(null)">
+                    <label ngbButtonLabel class="btn-simple font-weight-normal mt-0">
+                      <input ngbButton type="radio" [value]="true"> Si
+                    </label>
+                    <label ngbButtonLabel class="btn-simple font-weight-normal mt-0">
+                      <input ngbButton type="radio" [value]="false"> No
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 px-1">
+                <div class="form-group">
+                  <label for="createClientFormCarBrandModel">Marca/Año</label>
+                  <input [readOnly]="!createClientForm.get('hasCar').value"
+                         id="createClientFormCarBrandModel" formControlName="carBrandModel" type="text"
+                         class="form-control"
+                         maxlength="50"
+                         placeholder="Marca/Año">
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-12 px-1">
+                <h6 class="card-subtitle text-center my-2">¿Como acostumbra a pagar sus compras?</h6>
+              </div>
+            </div>
+            <ng-container formArrayName="clientDebitCreditCards"
+                          *ngFor="let card of createClientForm.get('clientDebitCreditCards')['controls']; let cardIndex = index">
+              <ng-container [formGroupName]="cardIndex">
+                <div class="row mx-0">
+                  <div class="col-sm-3 px-1">
+                    <div class="form-group">
+                      <label>Tipo Tarjeta</label>
+                      <select formControlName="cardType" style="width: 100%; height: 38px">
+                        <option value="null">Seleccione...</option>
+                        <option value="Debito">Debito</option>
+                        <option value="Credito">Credito</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-sm-3 px-1">
+                    <div class="form-group">
+                      <label>Franquicia</label>
+                      <select formControlName="franchiseName"
+                              style="width: 100%; height: 38px">
+                        <option value="null">Seleccione...</option>
+                        <ng-container
+                          *ngIf="createClientForm.get('clientDebitCreditCards').controls[cardIndex].get('cardType').value === 'Credito'">
+                          <option
+                            *ngFor="let cardName of (createClientForm.get('clientDebitCreditCards').controls[cardIndex].get('cardType').value === 'Credito'? creditCardsDropdownList:debitCardsDropdownList )"
+                            [value]="cardName">{{cardName}}</option>
+                        </ng-container>
+                        <ng-container
+                          *ngIf="createClientForm.get('clientDebitCreditCards').controls[cardIndex].get('cardType').value === 'Debito'">
+                          <option *ngFor="let cardName of debitCardsDropdownList"
+                                  [value]="cardName">{{cardName}}</option>
+                        </ng-container>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-sm-3 px-1">
+                    <div class="form-group">
+                      <label>Banco</label>
+                      <select formControlName="bankName"
+                              style="width: 100%; height: 38px">
+                        <option value="null">Seleccione...</option>
+                        <option *ngFor="let bankName of banksDropdownList"
+                                [value]="bankName">{{bankName}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-3 px-1 mt-3">
+                    <div class="row mx-0">
+                      <div class="col-6 px-0 text-center">
+                        <button
+                          [disabled]="
+                          cardIndex < createClientForm.get('clientDebitCreditCards')['controls'].length -1
+                          || createClientForm.disabled"
+                          (click)="addClientCard()"
+                          type="button" class="btn btn-primary btn-round">agregar
+                        </button>
+                      </div>
+                      <div class="col-6 px-0 text-center">
+                        <button
+                          [disabled]="cardIndex === 0 || createClientForm.disabled"
+                          (click)="removeClientCard(cardIndex)"
+                          type="button" class="btn btn-primary btn-round">borrar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+            <div class="row mx-0">
+              <div class="col-md-12 px-1">
+                <hr>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-12 px-1">
+                <h6 class="card-subtitle text-center my-2">Datos de cotitular</h6>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-6 px-1">
+                <div class="form-group">
+                  <label for="createClientFormName">
+                    Nombre
+                  </label>
+                  <input [readOnly]="!createClientForm.get('maritalStatus').value ||
+                         createClientForm.get('maritalStatus').value === 'Soltero'"
+                         id="createClientFormName" formControlName="coOwnerName" type="text"
+                         class="form-control"
+                         maxlength="50"
+                         placeholder="Nombre">
+                </div>
+              </div>
+              <div class="col-md-6 px-1">
+                <div class="form-group">
+                  <label>
+                    Apellido
+                  </label>
+                  <input [readOnly]="!createClientForm.get('maritalStatus').value ||
+                         createClientForm.get('maritalStatus').value === 'Soltero'"
+                         formControlName="coOwnerLastName" type="text"
+                         class="form-control"
+                         maxlength="50"
+                         placeholder="Apellido">
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>
+                    Genero
+                  </label>
+                  <select [attr.disabled]="(!createClientForm.get('maritalStatus').value ||
+                          createClientForm.get('maritalStatus').value === 'Soltero')? '': null"
+                          formControlName="coOwnerGender" style="width: 100%; height: 38px">
+                    <option *ngFor="let gender of genresList" [value]="gender.itemId">{{gender.itemLabel}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label for="createClientFormAge">Edad</label>
+                  <input [readOnly]="!createClientForm.get('maritalStatus').value ||
+                         createClientForm.get('maritalStatus').value === 'Soltero'"
+                         id="createClientFormAge" formControlName="coOwnerAge" type="number"
+                         class="form-control"
+                         min="0"
+                         maxlength="4"
+                         placeholder="Edad">
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label for="createClientFormProfession">Profesion</label>
+                  <input [readOnly]="!createClientForm.get('maritalStatus').value ||
+                         createClientForm.get('maritalStatus').value === 'Soltero'"
+                         id="createClientFormProfession" formControlName="coOwnerProfession" type="text"
+                         class="form-control"
+                         maxlength="100"
+                         placeholder="Profesion">
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label for="createClientFormDocType">Tipo de Doc.</label>
+                  <select [attr.disabled]="(!createClientForm.get('maritalStatus').value ||
+                          createClientForm.get('maritalStatus').value === 'Soltero')? '': null"
+                          formControlName="coOwnerDocumentType" id="createClientFormDocType"
+                          style="width: 100%; height: 38px">
+                    <option *ngFor="let docType of docTypesList" [value]="docType.itemId">{{docType.itemLabel}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-8 px-1">
+                <div class="form-group">
+                  <label for="createClientFormDocNumber">Numero de documento</label>
+                  <input [readOnly]="!createClientForm.get('maritalStatus').value ||
+                         createClientForm.get('maritalStatus').value === 'Soltero'"
+                         id="createClientFormDocNumber" formControlName="coOwnerDocumentNumber" type="text"
+                         class="form-control"
+                         maxlength="20"
+                         placeholder="Numero de documento">
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label for="createClientFormPhoneNumber">Telefono</label>
+                  <input [readOnly]="!createClientForm.get('maritalStatus').value ||
+                         createClientForm.get('maritalStatus').value === 'Soltero'"
+                         id="createClientFormPhoneNumber" formControlName="coOwnerPhoneNumber" type="text"
+                         class="form-control"
+                         maxlength="20"
+                         placeholder="Telefono">
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label for="createClientFormEmail">Correo</label>
+                  <input [readOnly]="!createClientForm.get('maritalStatus').value ||
+                         createClientForm.get('maritalStatus').value === 'Soltero'"
+                         id="createClientFormEmail" formControlName="coOwnerEmail" type="text"
+                         class="form-control"
+                         maxlength="50"
+                         placeholder="Correo">
+                  <app-inline-error
+                    *ngIf="createClientForm?.get('coOwnerEmail').errors?.pattern && createClientForm?.get('coOwnerEmail').touched"
+                    [error]="'Este campo debe ser un email valido.'"></app-inline-error>
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>Ingresos ($)</label>
+                  <input [readOnly]="!createClientForm.get('maritalStatus').value ||
+                         createClientForm.get('maritalStatus').value === 'Soltero'"
+                         formControlName="coOwnerMonthlyIncome" type="text"
+                         class="form-control"
+                         [value]="createClientForm?.get('coOwnerMonthlyIncome').value |  currency:'USD':'symbol':'0.0'"
+                         maxlength="50"
+                         placeholder="Ingresos">
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>¿Ha trabajado o trabaja en la industria del turismo?</label>
+                  <div class="btn-group btn-group-toggle" style="width: 100%" ngbRadioGroup
+                       formControlName="coOwnerHasWorkedWithTourismIndustry"
+                       (ngModelChange)="createClientForm.get('coOwnerTourismIndustry').setValue(null)">
+                    <label ngbButtonLabel class="btn-simple font-weight-normal mt-0">
+                      <input [disabled]="!createClientForm.get('maritalStatus').value ||
+                             createClientForm.get('maritalStatus').value === 'Soltero'"
+                             ngbButton type="radio" [value]="true"> Si
+                    </label>
+                    <label ngbButtonLabel class="btn-simple font-weight-normal mt-0">
+                      <input [disabled]="!createClientForm.get('maritalStatus').value ||
+                             createClientForm.get('maritalStatus').value === 'Soltero'"
+                             ngbButton type="radio" [value]="false"> No
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label for="createClientFormTourismIndustry">Cual?</label>
+                  <input [readOnly]="!createClientForm.get('maritalStatus').value ||
+                         createClientForm.get('maritalStatus').value === 'Soltero' ||
+                         !createClientForm.get('coOwnerHasWorkedWithTourismIndustry').value"
+                         id="createClientFormTourismIndustry" formControlName="coOwnerTourismIndustry" type="text"
+                         class="form-control"
+                         maxlength="50"
+                         placeholder="Cual?">
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label for="createClientFormDebitCreditBanks">Bancos Débito /Crédito</label>
+                  <input [readOnly]="!createClientForm.get('maritalStatus').value ||
+                         createClientForm.get('maritalStatus').value === 'Soltero'"
+                         id="createClientFormDebitCreditBanks" formControlName="coOwnerDebitCreditBanks" type="text"
+                         class="form-control"
+                         maxlength="100"
+                         placeholder="Bancos Débito /Crédito">
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-12 px-1">
+                <h6 class="card-subtitle text-center my-2">¿Como acostumbra a pagar sus compras?</h6>
+              </div>
+            </div>
+            <ng-container formArrayName="coOwnerDebitCreditCards"
+                          *ngFor="let card of createClientForm.get('coOwnerDebitCreditCards')['controls']; let cardIndex = index">
+              <ng-container [formGroupName]="cardIndex">
+                <div class="row mx-0">
+                  <div class="col-sm-3 px-1">
+                    <div class="form-group">
+                      <label>Tipo Tarjeta</label>
+                      <select
+                        [attr.disabled]="createClientForm.get('maritalStatus').value?
+                        createClientForm.get('maritalStatus').value === 'Soltero' ? '':null:''"
+                        formControlName="cardType" style="width: 100%; height: 38px">
+                        <option value="null">Seleccione...</option>
+                        <option value="Debito">Debito</option>
+                        <option value="Credito">Credito</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-sm-3 px-1">
+                    <div class="form-group">
+                      <label>Franquicia</label>
+                      <select
+                        [attr.disabled]="createClientForm.get('maritalStatus').value?
+                        createClientForm.get('maritalStatus').value === 'Soltero' ? '':null:''"
+                        formControlName="franchiseName"
+                        style="width: 100%; height: 38px">
+                        <option value="null">Seleccione...</option>
+                        <option
+                          *ngFor="let cardName of (createClientForm.get('coOwnerDebitCreditCards').controls[cardIndex].get('cardType').value === 'Credito'? creditCardsDropdownList:debitCardsDropdownList )"
+                          [value]="cardName">{{cardName}}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-sm-3 px-1">
+                    <div class="form-group">
+                      <label>Banco</label>
+                      <select
+                        [attr.disabled]="createClientForm.get('maritalStatus').value?
+                        createClientForm.get('maritalStatus').value === 'Soltero' ? '':null:''"
+                        formControlName="bankName"
+                        style="width: 100%; height: 38px">
+                        <option value="null">Seleccione...</option>
+                        <option *ngFor="let bankName of banksDropdownList"
+                                [value]="bankName">{{bankName}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-3 px-1 mt-3">
+                    <div class="row mx-0">
+                      <div class="col-6 px-0 text-center">
+                        <button
+                          [disabled]="(cardIndex < createClientForm.get('coOwnerDebitCreditCards')['controls'].length -1)
+                          || (!createClientForm.get('maritalStatus').value || createClientForm.get('maritalStatus').value === 'Soltero')
+                          || createClientForm.disabled"
+                          (click)="addCoOwnerCard()"
+                          type="button" class="btn btn-primary btn-round">agregar
+                        </button>
+                      </div>
+                      <div class="col-6 px-0 text-center">
+                        <button
+                          [disabled]="cardIndex === 0 || createClientForm.disabled"
+                          (click)="removeCoOwnerCard(cardIndex)"
+                          type="button" class="btn btn-primary btn-round">borrar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+            <div class="row mx-0">
+              <div class="col-md-12 px-1">
+                <hr>
+              </div>
+            </div>
+            <div class="row mx-0 mt-2">
+              <div class="col-md-12 px-1 text-center">
+                <p class="text-justify">
+                  <small>
+                    <b>Su información es vital para nosotros</b>, por eso autorizo con la <b>firma de este documento</b>
+                    el uso de mis
+                    datos para que se recolecten, almacenen, usen y administren, los cuales
+                    les han sido suministrados con la finalidad de uso estadistico, administrativos, comerciales y de
+                    mercadeo, para el envío de información sobre los diferentes programas y
+                    servicios, invitaciones a eventos, evaluar la calidad del servicio, realizar estudios o
+                    investigaciones de mercado, comercialización de servicios y productos a través de los
+                    diferentes canales de información, los cuales serán sometidos a los fines establecidos anteriormente
+                    <b>conforme a la ley 1581 de 2012 y su decreto 1377 de 2013</b>.
+                  </small>
+                </p>
+              </div>
+              <div class="col-md-6 mx-auto px-1 text-center">
+                <label>Autorizo con mi firma la disponibilidad de 30 a 40 minutos</label>
+                <div class="signature-container mt-2">
+                  <signature-pad [options]="signatureConfig" (click)="modifyClientSignature()" #clientSignaturePadComponent></signature-pad>
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-6 px-1 mt-2 text-center">
+                <button [disabled]="createClientForm.disabled" type="button" class="btn btn-primary btn-round"
+                        (click)="clearSignature(true)">
+                  Limpiar Firma
+                </button>
+              </div>
+              <div class="col-md-6 px-1 mt-2 text-center">
+                <button
+                  [disabled]="
+                  loadingCreateClientForm
+                  || (createClientForm.pristine && !clientSignatureModified)
+                  || createClientForm.invalid
+                  || createClientForm.disabled"
+                  type="submit" class="btn btn-primary btn-round">{{clientId ? 'Guardar' : 'Crear'}} Cliente
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<app-create-client-options-modal #createClientOptionsModalComponent></app-create-client-options-modal>

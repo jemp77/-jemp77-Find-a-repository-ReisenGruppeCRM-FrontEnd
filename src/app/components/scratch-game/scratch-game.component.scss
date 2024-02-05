@@ -1,0 +1,78 @@
+@import './src/assets/scss/paper-dashboard/variables';
+
+#scratch-game {
+  .right-shadow-bg {
+    background: url('../../../assets/img/backgrounds/right-shadow-bg.svg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+
+  .cheat-button-1 {
+    padding: 12px 0 12px 22px;
+    border-radius: 30px 0 0 30px;
+    margin: 10px 0;
+
+    &:hover, &:active {
+      background-color: $primary-color !important;
+    }
+  }
+
+  .cheat-button-2 {
+    padding: 12px 22px 12px 0;
+    border-radius: 0 30px 30px 0;
+    margin: 10px 0;
+
+    &:hover, &:active {
+      background-color: $primary-color !important;
+    }
+  }
+
+  ::ng-deep {
+
+    #js--sc--container {
+      max-width: 600px;
+      width: 100%;
+      height: 220px;
+      margin: auto;
+      position: relative;
+
+      canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 99;
+        border-radius: 5px;
+      }
+
+      .scratched-card {
+        z-index: 9;
+        width: 100%;
+        position: absolute;
+
+        .result-icons {
+          margin-top: 2.5rem;
+          font-size: 7em;
+          color: #424242;
+        }
+      }
+
+      .sc__inner {
+        background-color: #ffffff;
+        height: 100%;
+        width: 100%;
+        border-radius: 5px;
+        border: 1px solid #bbbbbb;
+      }
+    }
+
+    .scratch-card-bottom {
+      margin-top: 20px;
+
+      .card-bottom-text {
+        font-size: 1.2em;
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+@import './src/assets/scss/paper-dashboard/variables';
+
+#login {
+  .login-logo {
+    img {
+      max-width: 80% !important;
+    }
+  }
+
+  .right-shadow-bg {
+    background: url('../../../assets/img/backgrounds/right-shadow-bg.svg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+}

@@ -1,0 +1,31 @@
+@import './src/assets/scss/paper-dashboard/variables';
+
+#dashboard {
+  .success-card {
+    border: 2px solid $success-color;
+  }
+
+  .danger-card {
+    border: 2px solid $danger-color;
+  }
+
+  .cursor-pointer {
+    cursor: pointer;
+  }
+
+  .card {
+    .custom-card-title {
+      display: inline-block;
+      width: 100%;
+    }
+
+    .text-overflow {
+      white-space: nowrap;
+      overflow: hidden !important;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+    }
+
+  }
+
+}

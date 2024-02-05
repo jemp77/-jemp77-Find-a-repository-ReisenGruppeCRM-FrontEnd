@@ -1,0 +1,43 @@
+<section id="manifestComponent">
+  <div class="row mx-0">
+    <div class="col-md-12 px-1 mx-auto">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title text-center">Manifiestos</h3>
+        </div>
+        <div class="card-body">
+          <div class="row mx-0">
+            <div class="col-md-12">
+              <div class="row mx-0">
+                <div class="col-md-4">
+                  <div class="form-group my-2">
+                    <label class="my-0">Desde</label>
+                    <input required (ngModelChange)="validateRange()" [(ngModel)]="startDate" type="date"
+                           class="form-control">
+                    <app-inline-error *ngIf="!isDateRangeValid"
+                                      [error]="'Seleccione un rango valido.'"></app-inline-error>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group my-2">
+                    <label class="my-0">Hasta</label>
+                    <input required (ngModelChange)="validateRange()" [(ngModel)]="endDate" type="date"
+                           class="form-control">
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <button
+                    [disabled]="!isDateRangeValid"
+                    type="button" class="btn btn-primary btn-round my-4" (click)="applyDateRangeFilter()">
+                    Generar manifiesto
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

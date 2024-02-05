@@ -1,0 +1,100 @@
+<section id="dashboard">
+  <div class="row mx-0">
+    <div class="col-md-12">
+      <ngx-spinner name="dashboardSpinner" bdColor="rgba(244,243,238,0.8)" size="large" color="#78756f"
+                   type="ball-atom"
+                   [fullScreen]="true"></ngx-spinner>
+      <div class="card text-center">
+        <div class="card-header">
+          <h5 class="card-title">Hola, {{loggedUser.name}}.</h5>
+        </div>
+        <div class="card-body">
+          <p>Bienvenido a SmartCard</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mx-0">
+    <div class="col-md-5">
+      <h3 class="my-2">Clientes en sala ({{dailyClients.length}})</h3>
+      <p>
+        <fa-icon class="mx-1" [icon]="infoIcon"></fa-icon>
+        Haz click sobre un cliente para expandir su informacion.
+      </p>
+    </div>
+    <div class="col-md-7">
+      <div class="row mx-0">
+        <div class="col-md-5">
+          <div class="form-group my-2">
+            <label class="my-0">Desde</label>
+            <input required (ngModelChange)="validateRange()" [(ngModel)]="startDate" type="date" class="form-control">
+            <app-inline-error *ngIf="!isDateRangeValid" [error]="'Seleccione un rango valido.'"></app-inline-error>
+          </div>
+        </div>
+        <div class="col-md-5">
+          <div class="form-group my-2">
+            <label class="my-0">Hasta</label>
+            <input required (ngModelChange)="validateRange()" [(ngModel)]="endDate" type="date" class="form-control">
+          </div>
+        </div>
+        <div class="col-md-2">
+          <button
+            [disabled]="!isDateRangeValid"
+            type="button" class="btn btn-primary btn-round pull-right my-4" (click)="applyDateRangeFilter()"> Filtrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mx-0">
+    <ng-container *ngFor="let client of dailyClients">
+      <div class="col-12 col-sm-6 col-lg-3">
+        <div (click)="toggleClientExpanded(client)" [ngClass]="client.wayOutTime? 'danger-card':'success-card'"
+             class="card text-left cursor-pointer">
+          <div class="card-header">
+            <span class="px-0 pull-right">
+              <fa-icon *ngIf="commonService.isAllowed(['CanReadClient'])"
+                       [ngbTooltip]="'Detalle cliente'"
+                       [icon]="clientDetailsIcon"
+                       class="mx-1"
+                       placement="left"
+                       (click)="clientDetails(client);$event.stopPropagation()">
+              </fa-icon>
+              <fa-icon *ngIf="commonService.isAllowed(['CanEditClient'])"
+                       [ngbTooltip]="'Editar cliente'"
+                       [icon]="editClientIcon"
+                       class="mx-1"
+                       placement="left"
+                       (click)="editClient(client);$event.stopPropagation()">
+              </fa-icon>
+              <fa-icon *ngIf="!client.wayOutTime && commonService.isAllowed(['CanEditClient'])"
+                       [ngbTooltip]="'Salida cliente'"
+                       [icon]="outClientIcon"
+                       class="mx-1"
+                       placement="left"
+                       (click)="outClient(client);$event.stopPropagation()">
+              </fa-icon>
+              <fa-icon *ngIf="!client.hasContract && commonService.isAllowed(['CanCreateContract'])"
+                       [ngbTooltip]="'Generar contrato'"
+                       [icon]="generateContractIcon"
+                       class="mx-1"
+                       placement="left"
+                       (click)="generateContract(client);$event.stopPropagation()">
+              </fa-icon>
+            </span>
+            <h5 [class.text-overflow]="!client.expanded"
+                class="card-title custom-card-title">{{client.name}} {{client.lastName}}</h5>
+          </div>
+          <div class="card-body pt-0">
+            <p [class.text-overflow]="!client.expanded" class="custom-card-title mb-1">
+              <b>Cotitular:</b> {{(client.coOwnerName && client.coOwnerLastName) ? client.coOwnerName : '-'}} {{(client.coOwnerName && client.coOwnerLastName) ? client.coOwnerLastName : ''}}
+            </p>
+            <hr class="mt-2 mb-2">
+            <p class="mb-1"><b>Entrada:</b> {{client.arrivalTime}} / <b>Salida:</b> {{client.wayOutTime || '-'}}</p>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</section>
+<app-client-details-modal #clientDetailsModalComponent></app-client-details-modal>

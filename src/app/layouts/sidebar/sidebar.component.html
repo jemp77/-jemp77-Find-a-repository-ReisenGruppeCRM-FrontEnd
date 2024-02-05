@@ -1,0 +1,34 @@
+<div id="sidebar" class="sidebar-wrapper">
+  <div class="logo">
+    <a [routerLink]="'/'" class="simple-text logo-mini">
+      <div class="logo-image-small">
+        <img src="../../../assets/img/smartCard-logo.png">
+      </div>
+    </a>
+    <a [routerLink]="'/'" class="simple-text logo-normal">
+      Smart Card
+    </a>
+  </div>
+  <ul class="nav">
+    <ngb-accordion [closeOthers]="true" class="nav-accordion" [activeIds]="currentModule">
+      <ng-container *ngFor="let mainOption of sidebarOptions">
+        <ngb-panel *ngIf="commonService.isAllowed(mainOption.allowed)" [id]="mainOption.id">
+          <ng-template ngbPanelTitle>
+            <span [ngClass]="{'option-selected':currentModule === mainOption.id}">{{mainOption.title}}</span>
+          </ng-template>
+          <ng-template ngbPanelContent>
+            <ng-container *ngFor="let subOption of mainOption.options">
+              <a class="nav-accordion-link" *ngIf="commonService.isAllowed(subOption.allowed)"
+                 (click)="validateSelection(subOption)">
+                <p [ngClass]="{'option-selected':currentSubModule === subOption.id}"
+                   class="ml-4 my-2">
+                  {{subOption.title}}
+                </p>
+              </a>
+            </ng-container>
+          </ng-template>
+        </ngb-panel>
+      </ng-container>
+    </ngb-accordion>
+  </ul>
+</div>

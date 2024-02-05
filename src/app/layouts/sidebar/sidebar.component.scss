@@ -1,0 +1,69 @@
+@import './src/assets/scss/paper-dashboard/variables';
+
+#sidebar {
+  .nav {
+    ::ng-deep {
+      .nav-accordion {
+
+        .accordion-item {
+          margin-bottom: 5px !important;
+          box-shadow: none !important;
+          border: none !important;
+
+          .accordion-header {
+            padding: 0 15px;
+
+            .accordion-button {
+              width: 100%;
+              text-align: left;
+              font-weight: 400;
+              font-size: 12px;
+              line-height: 30px;
+              font-family: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+              color: $font-color !important;
+              padding: 0 !important;
+              margin-bottom: 0;
+              margin-top: 0;
+              text-transform: uppercase;
+              background: white !important;
+              border: none;
+
+              &:hover, &:active, &:focus {
+                color: black;
+                background: white;
+                border: none;
+                outline: none;
+              }
+
+              .option-selected {
+                color: black;
+                text-decoration: underline;
+              }
+            }
+          }
+
+          .accordion-body {
+            padding-top: 5px;
+            padding-bottom: 5px;
+
+            .nav-accordion-link {
+              cursor: pointer !important;
+              text-decoration: none !important;
+              color: $font-color !important;
+              font-size: 12px;
+              text-transform: uppercase;
+
+              &:hover {
+                color: black !important;
+              }
+              .option-selected {
+                color: black;
+                text-decoration: underline;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

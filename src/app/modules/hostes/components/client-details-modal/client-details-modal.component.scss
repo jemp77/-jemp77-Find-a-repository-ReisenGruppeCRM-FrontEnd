@@ -1,0 +1,9 @@
+@import './src/assets/scss/paper-dashboard/variables';
+
+.separator-left {
+  border-left: 1px solid $light-gray;
+}
+
+.separator-right {
+  border-right: 1px solid $light-gray;
+}

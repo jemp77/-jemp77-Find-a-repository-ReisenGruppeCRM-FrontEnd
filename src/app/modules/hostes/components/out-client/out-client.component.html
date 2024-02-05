@@ -1,0 +1,150 @@
+<section id="outClientForm">
+  <div class="row mx-0">
+    <div class="col-md-12 px-1 mx-auto">
+      <ngx-spinner name="outClientSpinner" bdColor="rgba(244,243,238,0.8)" size="large" color="#78756f" type="ball-atom"
+                   [fullScreen]="false"></ngx-spinner>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Salida Cliente</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="outClientForm" (ngSubmit)="updateClient()">
+            <div class="row mx-0">
+              <div class="col-md-6 px-1">
+                <div class="form-group">
+                  <label for="outClientFormName">
+                    Nombre
+                  </label>
+                  <span class="font-weight-bolder text-danger"> *</span>
+                  <input id="outClientFormName" formControlName="name" type="text" class="form-control">
+                  <app-inline-error
+                    *ngIf="outClientForm.get('name').errors && outClientForm.get('name').touched"
+                    [error]="'Este campo es requerido.'"></app-inline-error>
+                </div>
+              </div>
+              <div class="col-md-6 px-1">
+                <div class="form-group">
+                  <label for="outClientFormLastName">
+                    Apellido
+                  </label>
+                  <span class="font-weight-bolder text-danger"> *</span>
+                  <input id="outClientFormLastName" formControlName="lastName" type="text" class="form-control">
+                  <app-inline-error
+                    *ngIf="outClientForm.get('lastName').errors && outClientForm.get('lastName').touched"
+                    [error]="'Este campo es requerido.'"></app-inline-error>
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label>
+                    Tipo de doc.
+                  </label>
+                  <select formControlName="documentType" style="width: 100%; height: 38px">
+                    <option *ngFor="let docType of docTypesList" [value]="docType.itemId">{{docType.itemLabel}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label for="outClientFormDocumentNumber">
+                    Numero de documento
+                  </label>
+                  <input id="outClientFormDocumentNumber" formControlName="documentNumber" type="text"
+                         class="form-control">
+                </div>
+              </div>
+              <div class="col-md-5 px-1">
+                <div class="form-group">
+                  <label for="outClientFormVoucher">
+                    Bono
+                  </label>
+                  <input id="outClientFormVoucher"
+                         maxlength="50"
+                         formControlName="voucher" type="text" class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-7 px-1">
+                <div class="row mx-0">
+                  <div class="col-md-4 px-1">
+                    <label>Intento de venta</label>
+                    <div class="btn-group btn-group-toggle" style="width: 100%" ngbRadioGroup
+                         formControlName="attemptSell">
+                      <label ngbButtonLabel class="btn-simple font-weight-normal mt-0">
+                        <input ngbButton type="radio" [value]="true"> Si
+                      </label>
+                      <label ngbButtonLabel class="btn-simple font-weight-normal mt-0">
+                        <input ngbButton type="radio" [value]="false"> No
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-4 px-1">
+                    <label>Credito negado</label>
+                    <div class="btn-group btn-group-toggle" style="width: 100%" ngbRadioGroup
+                         formControlName="creditDenied">
+                      <label ngbButtonLabel class="btn-simple font-weight-normal mt-0">
+                        <input ngbButton type="radio" [value]="true"> Si
+                      </label>
+                      <label ngbButtonLabel class="btn-simple font-weight-normal mt-0">
+                        <input ngbButton type="radio" [value]="false"> No
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-md-4 px-1">
+                    <label>Reserva</label>
+                    <div class="btn-group btn-group-toggle" style="width: 100%" ngbRadioGroup
+                         (ngModelChange)="onReserveChange()"
+                         formControlName="reserve">
+                      <label ngbButtonLabel class="btn-simple font-weight-normal mt-0">
+                        <input ngbButton type="radio" [value]="true"> Si
+                      </label>
+                      <label ngbButtonLabel class="btn-simple font-weight-normal mt-0">
+                        <input ngbButton type="radio" [value]="false"> No
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-5 px-1">
+                <div class="form-group">
+                  <label>
+                    Valor Reserva
+                  </label>
+                  <span *ngIf="!!outClientForm.get('reserve').value" class="font-weight-bolder text-danger"> *</span>
+                  <input [readOnly]="!(!!outClientForm.get('reserve').value)"
+                         [value]="outClientForm.get('reserveValue').value |  currency:'USD':'symbol':'0.0'"
+                         formControlName="reserveValue" type="text"
+                         class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-12 px-1">
+                <div class="form-group">
+                  <label for="outClientObservations">
+                    Observaciones
+                  </label>
+                  <textarea id="outClientObservations" formControlName="observations" type="text"
+                            class="form-control">
+                  </textarea>
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-12 px-1 mt-2 text-center">
+                <button
+                  type="submit" class="btn btn-primary btn-round"
+                  [disabled]="outClientForm.invalid || loadingOutClientForm">
+                  Guardar
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

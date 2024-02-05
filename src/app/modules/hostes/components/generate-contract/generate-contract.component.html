@@ -1,0 +1,866 @@
+<section id="generateContractForm">
+  <div class="row mx-0">
+    <div class="col-md-12 px-1 mx-auto">
+      <ngx-spinner name="generateContractSpinner" bdColor="rgba(244,243,238,0.8)" size="large" color="#78756f"
+                   type="ball-atom" [fullScreen]="true"></ngx-spinner>
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">{{clientId ? 'Generar' : 'Editar'}} Contrato</h3>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="generateContractForm" (ngSubmit)="generateOrEditContract()">
+            <div class="row mx-0">
+              <div class="col-md-2 px-1">
+                <div class="form-group">
+                  <label>Fecha</label>
+                  <span class="font-weight-bolder text-danger"> *</span>
+                  <input formControlName="contractDate" type="date" class="form-control" [max]="maxContractDate">
+                </div>
+              </div>
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label>Numero de contrato</label>
+                  <input formControlName="contractNumber" type="text"
+                         readonly
+                         class="form-control"
+                         placeholder="Numero de contrato">
+                  <app-inline-error
+                    *ngIf="generateContractForm.get('contractNumber').errors && generateContractForm.get('contractNumber').touched"
+                    [error]="'Este campo es requerido.'"></app-inline-error>
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-12 px-1">
+                <h6 class="card-subtitle my-2">Datos del cliente</h6>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label>Nombre</label>
+                  <span class="font-weight-bolder text-danger"> *</span>
+                  <input formControlName="clientName" type="text" class="form-control">
+                  <app-inline-error
+                    *ngIf="generateContractForm.get('clientName').errors && generateContractForm.get('clientName').touched"
+                    [error]="'Este campo es requerido.'"></app-inline-error>
+                </div>
+              </div>
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label>Apellido</label>
+                  <span class="font-weight-bolder text-danger"> *</span>
+                  <input formControlName="clientLastName" type="text" class="form-control">
+                  <app-inline-error
+                    *ngIf="generateContractForm.get('clientLastName').errors && generateContractForm.get('clientLastName').touched"
+                    [error]="'Este campo es requerido.'"></app-inline-error>
+                </div>
+              </div>
+              <div class="col-md-2 px-1">
+                <div class="form-group">
+                  <label>Tipo doc.</label>
+                  <span class="font-weight-bolder text-danger"> *</span>
+                  <select formControlName="clientDocumentType" style="width: 100%; height: 38px">
+                    <option *ngFor="let docType of docTypesList" [value]="docType.itemId">{{docType.itemLabel}}</option>
+                  </select>
+                  <app-inline-error
+                    *ngIf="generateContractForm.get('clientDocumentType').errors && generateContractForm.get('clientDocumentType').touched"
+                    [error]="'Este campo es requerido.'"></app-inline-error>
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>Numero doc.</label>
+                  <span class="font-weight-bolder text-danger"> *</span>
+                  <input formControlName="clientDocumentNumber" type="text" class="form-control">
+                  <app-inline-error
+                    *ngIf="generateContractForm.get('clientDocumentNumber').errors && generateContractForm.get('clientDocumentNumber').touched"
+                    [error]="'Este campo es requerido.'"></app-inline-error>
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>Email</label>
+                  <span class="font-weight-bolder text-danger"> *</span>
+                  <input formControlName="clientEmail" type="text" class="form-control">
+                  <app-inline-error
+                    *ngIf="generateContractForm.get('clientEmail').errors?.required && generateContractForm.get('clientEmail').touched"
+                    [error]="'Este campo es requerido.'"></app-inline-error>
+                  <app-inline-error
+                    *ngIf="generateContractForm.get('clientEmail').errors?.pattern && generateContractForm.get('clientEmail').touched"
+                    [error]="'Este campo debe ser un email valido.'"></app-inline-error>
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>Telefono.</label>
+                  <span class="font-weight-bolder text-danger"> *</span>
+                  <input formControlName="clientPhoneNumber" type="text" class="form-control">
+                  <app-inline-error
+                    *ngIf="generateContractForm.get('clientPhoneNumber').errors && generateContractForm.get('clientPhoneNumber').touched"
+                    [error]="'Este campo es requerido.'"></app-inline-error>
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>Profesion.</label>
+                  <span class="font-weight-bolder text-danger"> *</span>
+                  <input formControlName="clientProfession" type="text" class="form-control">
+                  <app-inline-error
+                    *ngIf="generateContractForm.get('clientProfession').errors && generateContractForm.get('clientProfession').touched"
+                    [error]="'Este campo es requerido.'"></app-inline-error>
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-12 px-1">
+                <hr>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>
+                    Pais
+                    <span class="font-weight-bolder text-danger"> *</span>
+                  </label>
+                  <select (ngModelChange)="onContractorCountryChange()"
+                          formControlName="contractorCountry"
+                          style="width: 100%; height: 38px">
+                    <option value="Ecuador">Ecuador</option>
+                    <option value="Colombia">Colombia</option>
+                    <option value="EEUU">EEUU</option>
+                    <option value="Venezuela">Venezuela</option>
+                    <option value="Peru">Peru</option>
+                    <option value="Panama">Panama</option>
+                  </select>
+                  <app-inline-error
+                    *ngIf="generateContractForm.get('contractorCountry').errors && generateContractForm.get('contractorCountry').touched"
+                    [error]="'Este campo es requerido.'"></app-inline-error>
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>
+                    Departamento
+                    <span class="font-weight-bolder text-danger"> *</span>
+                  </label>
+                  <ng-container *ngIf="generateContractForm.get('contractorCountry').value !== 'Colombia'">
+                    <input class="form-control" formControlName="contractorDepartment" type="text">
+                  </ng-container>
+                  <ng-container *ngIf="generateContractForm.get('contractorCountry').value === 'Colombia'">
+                    <select (ngModelChange)="loadContractorDepartmentCities($event)"
+                            formControlName="contractorDepartment"
+                            style="width: 100%; height: 40px">
+                      <option *ngFor="let department of colombianDepartments"
+                              [value]="department.itemLabel">{{department.itemLabel}}</option>
+                    </select>
+                  </ng-container>
+                  <app-inline-error
+                    *ngIf="generateContractForm.get('contractorDepartment').errors && generateContractForm.get('contractorDepartment').touched"
+                    [error]="'Este campo es requerido.'"></app-inline-error>
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>
+                    Ciudad
+                    <span class="font-weight-bolder text-danger"> *</span>
+                  </label>
+                  <ng-container *ngIf="generateContractForm.get('contractorCountry').value !== 'Colombia'">
+                    <input class="form-control" formControlName="contractorCity" type="text">
+                  </ng-container>
+                  <ng-container *ngIf="generateContractForm.get('contractorCountry').value === 'Colombia'">
+                    <select formControlName="contractorCity"
+                            style="width: 100%; height: 40px">
+                      <option *ngFor="let city of contractorDepartmentCities"
+                              [value]="city.itemId">{{city.itemLabel}}</option>
+                    </select>
+                  </ng-container>
+                  <app-inline-error
+                    *ngIf="generateContractForm.get('contractorCity').errors && generateContractForm.get('contractorCity').touched"
+                    [error]="'Este campo es requerido.'"></app-inline-error>
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label>
+                    Direccion
+                    <span class="font-weight-bolder text-danger"> *</span>
+                  </label>
+                  <input formControlName="contractorAddress" type="text"
+                         class="form-control"
+                         maxlength="50"
+                         placeholder="Direccion">
+                  <app-inline-error
+                    *ngIf="generateContractForm.get('contractorAddress').errors && generateContractForm.get('contractorAddress').touched"
+                    [error]="'Este campo es requerido.'"></app-inline-error>
+                </div>
+              </div>
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label>
+                    Oficina
+                  </label>
+                  <input formControlName="contractorOffice" type="text"
+                         class="form-control"
+                         maxlength="50"
+                         placeholder="Oficina">
+                </div>
+              </div>
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label>
+                    Celular
+                    <span class="font-weight-bolder text-danger"> *</span>
+                  </label>
+                  <input formControlName="contractorCellphone" type="text"
+                         class="form-control"
+                         maxlength="50"
+                         placeholder="Celular">
+                  <app-inline-error
+                    *ngIf="generateContractForm.get('contractorCellphone').errors && generateContractForm.get('contractorCellphone').touched"
+                    [error]="'Este campo es requerido.'"></app-inline-error>
+                </div>
+              </div>
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label>
+                    Fecha nacimiento
+                    <span class="font-weight-bolder text-danger"> *</span>
+                  </label>
+                  <input formControlName="contractorBirthDate" type="date"
+                         style="padding: 8.5px"
+                         class="form-control"
+                         placeholder="DD/MM/AAAA">
+                  <app-inline-error
+                    *ngIf="generateContractForm.get('contractorBirthDate').errors && generateContractForm.get('contractorBirthDate').touched"
+                    [error]="'Este campo es requerido.'"></app-inline-error>
+                </div>
+              </div>
+            </div>
+            <!--Co Owner-->
+            <div class="row mx-0">
+              <div class="col-md-12 px-1">
+                <h6 class="card-subtitle my-2">Datos del cotitular</h6>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label>
+                    Nombre
+                  </label>
+                  <input
+                    [readOnly]="!generateContractForm.get('clientMaritalStatus').value || generateContractForm.get('clientMaritalStatus').value === 'Soltero'"
+                    formControlName="coOwnerName" type="text"
+                    class="form-control"
+                    maxlength="50"
+                    placeholder="Nombre">
+                </div>
+              </div>
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label>
+                    Apellido
+                  </label>
+                  <input
+                    [readOnly]="!generateContractForm.get('clientMaritalStatus').value || generateContractForm.get('clientMaritalStatus').value === 'Soltero'"
+                    formControlName="coOwnerLastName" type="text"
+                    class="form-control"
+                    maxlength="50"
+                    placeholder="Apellido">
+                </div>
+              </div>
+              <div class="col-md-2 px-1">
+                <div class="form-group">
+                  <label>
+                    Tipo doc.
+                  </label>
+                  <select
+                    [attr.disabled]="(!generateContractForm.get('clientMaritalStatus').value || generateContractForm.get('clientMaritalStatus').value === 'Soltero') ? '':null"
+                    formControlName="coOwnerDocumentType" style="width: 100%; height: 40px">
+                    <option *ngFor="let docType of docTypesList" [value]="docType.itemId">{{docType.itemLabel}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>
+                    Numero doc.
+                  </label>
+                  <input
+                    [readOnly]="!generateContractForm.get('clientMaritalStatus').value || generateContractForm.get('clientMaritalStatus').value === 'Soltero'"
+                    formControlName="coOwnerDocumentNumber" type="text"
+                    class="form-control"
+                    maxlength="50"
+                    placeholder="Numero doc.">
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>
+                    Email
+                  </label>
+                  <input
+                    [readOnly]="!generateContractForm.get('clientMaritalStatus').value || generateContractForm.get('clientMaritalStatus').value === 'Soltero'"
+                    formControlName="coOwnerEmail" type="text"
+                    class="form-control"
+                    maxlength="50"
+                    placeholder="Email">
+                  <app-inline-error
+                    *ngIf="generateContractForm.get('coOwnerEmail').errors?.pattern && generateContractForm.get('coOwnerEmail').touched"
+                    [error]="'Este campo debe ser un email valido.'"></app-inline-error>
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>
+                    Telefono
+                  </label>
+                  <input
+                    [readOnly]="!generateContractForm.get('clientMaritalStatus').value || generateContractForm.get('clientMaritalStatus').value === 'Soltero'"
+                    formControlName="coOwnerPhoneNumber" type="text"
+                    class="form-control"
+                    maxlength="50"
+                    placeholder="Telefono">
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>
+                    Profesion
+                  </label>
+                  <input
+                    [readOnly]="!generateContractForm.get('clientMaritalStatus').value || generateContractForm.get('clientMaritalStatus').value === 'Soltero'"
+                    formControlName="coOwnerProfession" type="text"
+                    class="form-control"
+                    maxlength="50"
+                    placeholder="Profesion">
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>
+                    Pais
+                  </label>
+                  <select
+                    [attr.disabled]="(!generateContractForm.get('clientMaritalStatus').value || generateContractForm.get('clientMaritalStatus').value === 'Soltero')? '':null"
+                    (ngModelChange)="onCoOwnerCountryChange()"
+                    formControlName="coOwnerCountry"
+                    style="width: 100%; height: 38px">
+                    <option value="Ecuador">Ecuador</option>
+                    <option value="Colombia">Colombia</option>
+                    <option value="EEUU">EEUU</option>
+                    <option value="Venezuela">Venezuela</option>
+                    <option value="Peru">Peru</option>
+                    <option value="Panama">Panama</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>
+                    Departamento
+                  </label>
+                  <ng-container *ngIf="generateContractForm.get('coOwnerCountry').value !== 'Colombia'">
+                    <input
+                      [readOnly]="!generateContractForm.get('clientMaritalStatus').value || generateContractForm.get('clientMaritalStatus').value === 'Soltero'"
+                      class="form-control" formControlName="coOwnerDepartment" type="text">
+                  </ng-container>
+                  <ng-container *ngIf="generateContractForm.get('coOwnerCountry').value === 'Colombia'">
+                    <select (ngModelChange)="loadCoOwnerDepartmentCities($event)"
+                            formControlName="coOwnerDepartment"
+                            style="width: 100%; height: 40px">
+                      <option *ngFor="let department of colombianDepartments"
+                              [value]="department.itemLabel">{{department.itemLabel}}</option>
+                    </select>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>
+                    Ciudad
+                  </label>
+                  <ng-container *ngIf="generateContractForm.get('coOwnerCountry').value !== 'Colombia'">
+                    <input
+                      [readOnly]="!generateContractForm.get('clientMaritalStatus').value || generateContractForm.get('clientMaritalStatus').value === 'Soltero'"
+                      class="form-control" formControlName="coOwnerCity" type="text">
+                  </ng-container>
+                  <ng-container *ngIf="generateContractForm.get('coOwnerCountry').value === 'Colombia'">
+                    <select formControlName="coOwnerCity"
+                            style="width: 100%; height: 40px">
+                      <option *ngFor="let city of coOwnerDepartmentCities"
+                              [value]="city.itemId">{{city.itemLabel}}</option>
+                    </select>
+                  </ng-container>
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label>
+                    Direccion
+                  </label>
+                  <input
+                    [readOnly]="!generateContractForm.get('clientMaritalStatus').value || generateContractForm.get('clientMaritalStatus').value === 'Soltero'"
+                    formControlName="coOwnerAddress" type="text"
+                    class="form-control"
+                    maxlength="50"
+                    placeholder="Direccion">
+                </div>
+              </div>
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label>
+                    Oficina
+                  </label>
+                  <input
+                    [readOnly]="!generateContractForm.get('clientMaritalStatus').value || generateContractForm.get('clientMaritalStatus').value === 'Soltero'"
+                    formControlName="coOwnerOffice" type="text"
+                    class="form-control"
+                    maxlength="50"
+                    placeholder="Oficina">
+                </div>
+              </div>
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label>
+                    Celular
+                  </label>
+                  <input
+                    [readOnly]="!generateContractForm.get('clientMaritalStatus').value || generateContractForm.get('clientMaritalStatus').value === 'Soltero'"
+                    formControlName="coOwnerCellphone" type="text"
+                    class="form-control"
+                    maxlength="50"
+                    placeholder="Celular">
+                </div>
+              </div>
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label>
+                    Fecha nacimiento
+                  </label>
+                  <input
+                    [readOnly]="!generateContractForm.get('clientMaritalStatus').value || generateContractForm.get('clientMaritalStatus').value === 'Soltero'"
+                    formControlName="coOwnerBirthDate" type="date"
+                    style="padding: 8.5px"
+                    class="form-control"
+                    placeholder="DD/MM/AAAA">
+                </div>
+              </div>
+            </div>
+            <!--Beneficiaries-->
+            <div class="row mx-0">
+              <div class="col-md-12 px-1">
+                <h6 class="card-subtitle my-2">Beneficiarios</h6>
+              </div>
+            </div>
+            <ng-container formArrayName="beneficiaries"
+                          *ngFor="let beneficiary of generateContractForm.get('beneficiaries')['controls']; let beneficiaryIndex = index">
+              <ng-container [formGroupName]="beneficiaryIndex">
+                <div class="row mx-0">
+                  <div class="col-sm-4 px-1">
+                    <div class="form-group">
+                      <label>Nombres</label>
+                      <input class="form-control" type="text" formControlName="names">
+                    </div>
+                  </div>
+                  <div class="col-sm-4 px-1">
+                    <div class="form-group">
+                      <label>Apellidos</label>
+                      <input class="form-control" type="text" formControlName="lastNames">
+                    </div>
+                  </div>
+                  <div class="col-sm-4 px-1">
+                    <div class="form-group">
+                      <label>Fecha nacimiento</label>
+                      <input formControlName="birthDate" type="date"
+                             style="padding: 8.5px"
+                             class="form-control"
+                             placeholder="DD/MM/AAAA">
+                    </div>
+                  </div>
+                </div>
+                <div class="row mx-0">
+                  <div class="col-sm-4 px-1">
+                    <div class="form-group">
+                      <label>
+                        Tipo doc.
+                      </label>
+                      <select formControlName="documentType" style="width: 100%; height: 40px">
+                        <option *ngFor="let docType of docTypesList"
+                                [value]="docType.itemId">{{docType.itemLabel}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-4 px-1">
+                    <div class="form-group">
+                      <label>Numero doc.</label>
+                      <input formControlName="documentNumber" type="text" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-md-4 px-1 mt-3">
+                    <div class="row mx-0">
+                      <div class="col-6 px-0 text-center">
+                        <button
+                          [disabled]="
+                          beneficiaryIndex < generateContractForm.get('beneficiaries')['controls'].length -1
+                          || generateContractForm.disabled"
+                          (click)="addBeneficiary()"
+                          type="button" class="btn btn-primary btn-round">agregar
+                        </button>
+                      </div>
+                      <div class="col-6 px-0 text-center">
+                        <button
+                          [disabled]="beneficiaryIndex === 0 || generateContractForm.disabled"
+                          (click)="removeBeneficiary(beneficiaryIndex)"
+                          type="button" class="btn btn-primary btn-round">borrar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+            <!--Values-->
+            <div class="row mx-0">
+              <div class="col-md-12 px-1">
+                <h6 class="card-subtitle my-2">Ingreso</h6>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-2 px-1">
+                <div class="form-group">
+                  <label>
+                    Años de duracion
+                    <span class="font-weight-bolder text-danger"> *</span>
+                  </label>
+                  <input formControlName="durationYears" type="number"
+                         min="0"
+                         class="form-control"
+                         placeholder="Años de duracion">
+                  <app-inline-error
+                    *ngIf="generateContractForm.get('durationYears').errors && generateContractForm.get('durationYears').touched"
+                    [error]="'Este campo es requerido.'"></app-inline-error>
+                </div>
+              </div>
+              <div class="col-md-10 px-0">
+                <div class="row mx-0">
+                  <div class="col-md-4 px-1">
+                    <div class="form-group">
+                      <label>
+                        Valor membresia
+                        <span class="font-weight-bolder text-danger"> *</span>
+                      </label>
+                      <input formControlName="membershipPrice" type="text"
+                             [value]="generateContractForm?.get('membershipPrice').value |  currency:'USD':'symbol':'0.0'"
+                             class="form-control"
+                             placeholder="Valor membresia">
+                      <app-inline-error
+                        *ngIf="generateContractForm.get('membershipPrice').errors && generateContractForm.get('membershipPrice').touched"
+                        [error]="'Este campo es requerido.'"></app-inline-error>
+                    </div>
+                  </div>
+                  <div class="col-md-4 px-1">
+                    <div class="form-group">
+                      <label>
+                        Valor ingreso
+                        <span class="font-weight-bolder text-danger"> *</span>
+                      </label>
+                      <input formControlName="entryPrice" type="text"
+                             class="form-control"
+                             [value]="generateContractForm?.get('entryPrice').value |  currency:'USD':'symbol':'0.0'"
+                             placeholder="Valor ingreso">
+                      <app-inline-error
+                        *ngIf="generateContractForm.get('entryPrice').errors?.required && generateContractForm.get('entryPrice').touched"
+                        [error]="'Este campo es requerido.'"></app-inline-error>
+                      <app-inline-error
+                        *ngIf="generateContractForm.get('entryPrice').errors?.invalidPrice && generateContractForm.get('entryPrice').touched"
+                        [error]="'Debe ser menor al valor de la membresia.'"></app-inline-error>
+                    </div>
+                  </div>
+                  <div class="col-md-4 px-1">
+                    <div class="form-group">
+                      <label>
+                        Valor CUI
+                        <span class="font-weight-bolder text-danger"> *</span>
+                      </label>
+                      <input formControlName="cuiPrice" type="text"
+                             [value]="generateContractForm?.get('cuiPrice').value |  currency:'USD':'symbol':'0.0'"
+                             class="form-control"
+                             placeholder="Valor CUI">
+                      <app-inline-error
+                        *ngIf="generateContractForm.get('cuiPrice').errors?.required && generateContractForm.get('cuiPrice').touched"
+                        [error]="'Este campo es requerido.'"></app-inline-error>
+                      <app-inline-error
+                        *ngIf="generateContractForm.get('cuiPrice').errors?.invalidPrice && generateContractForm.get('cuiPrice').touched"
+                        [error]="'Debe ser menor al valor de la membresia.'"></app-inline-error>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label>
+                    Valor a financiar
+                  </label>
+                  <input formControlName="lendValue" type="text"
+                         readonly
+                         [value]="generateContractForm?.get('lendValue').value |  currency:'USD':'symbol':'0.0'"
+                         class="form-control"
+                         placeholder="Valor a financiar">
+                </div>
+              </div>
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label>
+                    Cuotas
+                  </label>
+                  <input formControlName="lendInstallments" type="number"
+                         [readOnly]="(!generateContractForm?.get('lendValue').value ||
+                         generateContractForm?.get('lendValue').value === 0) ||
+                         (!generateContractForm?.get('durationYears').value ||
+                         generateContractForm?.get('durationYears').value === 0)"
+                         min="0"
+                         class="form-control"
+                         placeholder="Cuotas">
+                  <app-inline-error
+                    *ngIf="generateContractForm.get('lendInstallments').errors?.durationYearsRequired"
+                    [error]="'El campo años de duracion es requerido.'"></app-inline-error>
+                  <app-inline-error
+                    *ngIf="generateContractForm.get('lendInstallments').errors?.invalidNumberOfInstallments"
+                    [error]="'La cantidad de cuotas no puede exceder los años de duracion.'"></app-inline-error>
+                </div>
+              </div>
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label>
+                    Valor cuota
+                  </label>
+                  <input formControlName="lendInstallmentPrice" type="text"
+                         readonly
+                         [value]="generateContractForm?.get('lendInstallmentPrice').value |  currency:'USD':'symbol':'0.0'"
+                         class="form-control"
+                         placeholder="Valor cuota">
+                </div>
+              </div>
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label>
+                    Fecha Cuota
+                  </label>
+                  <input formControlName="lendInstallmentDate" type="date"
+                         style="padding: 8.5px"
+                         [readOnly]="(!generateContractForm?.get('lendValue').value ||
+                         generateContractForm?.get('lendValue').value === 0) ||
+                         (!generateContractForm?.get('durationYears').value ||
+                         generateContractForm?.get('durationYears').value === 0)"
+                         class="form-control"
+                         placeholder="Fecha Cuota">
+                  <app-inline-error
+                    *ngIf="generateContractForm.get('lendInstallmentDate').errors?.required"
+                    [error]="'Este campo es requerido.'"></app-inline-error>
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-12 px-1">
+                <div class="form-group">
+                  <label>
+                    Observaciones
+                  </label>
+                  <textarea formControlName="observations" type="text"
+                            class="form-control">
+                  </textarea>
+                </div>
+              </div>
+            </div>
+            <!--signatures-->
+            <div class="row mx-0">
+              <div class="col-md-6 px-1 text-center">
+                <label>Firma Titular</label>
+                <div class="signature-container mt-2">
+                  <signature-pad [options]="signatureConfig" #contractorSignaturePadComponent></signature-pad>
+                </div>
+                <button [disabled]="generateContractForm.disabled" type="button" class="btn btn-primary btn-round mt-2"
+                        (click)="contractorSignaturePad.clear()">
+                  Limpiar Firma
+                </button>
+              </div>
+              <div class="col-md-6 px-1 text-center">
+                <label>Firma Cotitular</label>
+                <div class="signature-container mt-2">
+                  <signature-pad [options]="signatureConfig" #coOwnerSignaturePadComponent></signature-pad>
+                </div>
+                <button [disabled]="generateContractForm.disabled" type="button" class="btn btn-primary btn-round mt-2"
+                        (click)="coOwnerSignaturePad.clear()">
+                  Limpiar Firma
+                </button>
+              </div>
+            </div>
+            <div class="row mx-0 mt-2">
+              <div class="col-md-6 px-1 text-center">
+                <label>Firma Asesor 1</label>
+                <div class="signature-container mt-2">
+                  <signature-pad [options]="signatureConfig" #adviser1SignaturePadComponent></signature-pad>
+                </div>
+                <button [disabled]="generateContractForm.disabled" type="button" class="btn btn-primary btn-round mt-2"
+                        (click)="adviser1SignaturePad.clear()">
+                  Limpiar Firma
+                </button>
+              </div>
+              <div class="col-md-6 px-1 text-center">
+                <label>Firma Asesor 2</label>
+                <div class="signature-container mt-2">
+
+                  <signature-pad [options]="signatureConfig" #adviser2SignaturePadComponent></signature-pad>
+                </div>
+                <button [disabled]="generateContractForm.disabled" type="button" class="btn btn-primary btn-round mt-2"
+                        (click)="adviser2SignaturePad.clear()">
+                  Limpiar Firma
+                </button>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-12 px-1">
+                <hr>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-12 px-1">
+                <h6 class="card-subtitle my-2">Modo de pago</h6>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label>
+                    Tarjeta debito
+                  </label>
+                  <input formControlName="debitCardPayment" type="text"
+                         [value]="generateContractForm?.get('debitCardPayment').value |  currency:'USD':'symbol':'0.0'"
+                         class="form-control"
+                         placeholder="Tarjeta debito">
+                </div>
+              </div>
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label>
+                    Tarjeta Credito
+                  </label>
+                  <input formControlName="creditCardPayment" type="text"
+                         [value]="generateContractForm?.get('creditCardPayment').value |  currency:'USD':'symbol':'0.0'"
+                         class="form-control"
+                         placeholder="Tarjeta credito">
+                </div>
+              </div>
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label>
+                    Transferencia bancaria
+                  </label>
+                  <input formControlName="transferPayment" type="text"
+                         [value]="generateContractForm?.get('transferPayment').value |  currency:'USD':'symbol':'0.0'"
+                         class="form-control"
+                         placeholder="Transferencia bancaria">
+                </div>
+              </div>
+              <div class="col-md-3 px-1">
+                <div class="form-group">
+                  <label>
+                    Efectivo
+                  </label>
+                  <input formControlName="cashPayment" type="text"
+                         [value]="generateContractForm?.get('cashPayment').value |  currency:'USD':'symbol':'0.0'"
+                         class="form-control"
+                         placeholder="Efectivo">
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-6 px-1">
+                <div class="form-group">
+                  <label>
+                    Valor financiado
+                  </label>
+                  <input formControlName="lendValue" type="text"
+                         readonly
+                         [value]="generateContractForm?.get('lendValue').value |  currency:'USD':'symbol':'0.0'"
+                         class="form-control"
+                         placeholder="Valor financiado">
+                </div>
+              </div>
+              <div class="col-md-6 px-1">
+                <div class="form-group">
+                  <label>
+                    Valor Total
+                  </label>
+                  <input formControlName="totalPayment" type="text"
+                         readonly
+                         [value]="generateContractForm?.get('totalPayment').value |  currency:'USD':'symbol':'0.0'"
+                         class="form-control"
+                         placeholder="Valor Total">
+                  <app-inline-error
+                    *ngIf="generateContractForm.get('totalPayment').errors?.required && generateContractForm.get('totalPayment').touched"
+                    [error]="'Este campo es requerido.'"></app-inline-error>
+                  <app-inline-error
+                    *ngIf="generateContractForm.get('totalPayment').errors?.totalPaymentError"
+                    [error]="'El total a pagar no coincide con el valor de la membresia' + ' (' + (generateContractForm.get('membershipPrice').value |  currency:'USD':'symbol':'0.0') + ')' "></app-inline-error>
+                </div>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-6 mx-auto px-1 text-center">
+                <label>Firma Autorizacion</label>
+                <span class="font-weight-bolder text-danger"> *</span>
+                <div class="signature-container mt-2">
+                   <signature-pad [options]="signatureConfig"
+                                      #authorizationSignaturePadComponent></signature-pad>
+                 </div>
+                 <button type="button" class="btn btn-primary btn-round mt-2"
+                         [disabled]="generateContractForm.disabled"
+                         (click)="authorizationSignaturePad.clear()">
+                   Limpiar Firma
+                 </button>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-12 px-1">
+                <hr>
+              </div>
+            </div>
+            <div class="row mx-0">
+              <div class="col-md-12 px-1 mt-2 text-center">
+                <button
+                  [disabled]="
+                  loadingGenerateContractForm
+                  || generateContractForm.pristine
+                  || generateContractForm.invalid
+                  || generateContractForm.disabled"
+                  type="submit" class="btn btn-primary btn-round">{{clientId ? 'Generar' : 'Guardar'}} Contrato
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<app-simple-options-modal #printContractOptionsModal [modalModel]="printContractModalModel"
+                          (accepted)="onPrintContractModalAccepted($event)"
+                          (canceled)="onPrintContractModalCanceledOrDismissed()"
+                          (dismissed)="onPrintContractModalCanceledOrDismissed()"></app-simple-options-modal>
