@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
-  env: 'prod-smartcard',
-  name: 'smartcard',
-  apiHost: 'http://qservices.smartcardcrm.com',
+  env: 'prod-reisengruppe',
+  name: 'reisengruppe',
+  apiHost: 'http://qcrm.reisenrg.com',
   apiPath: 'api',
 };

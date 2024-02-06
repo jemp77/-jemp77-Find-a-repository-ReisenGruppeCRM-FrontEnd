@@ -5,8 +5,8 @@
 
 export const environment = {
   production: false,
-  env: 'local-smartcard',
-  name: 'smartcard',
-  apiHost: 'https://crmservice.smartcard.com.co',
+  env: 'local-reisengruppe',
+  name: 'reisengruppe',
+  apiHost: 'https://localhost:44308',
   apiPath: 'api',
 };
